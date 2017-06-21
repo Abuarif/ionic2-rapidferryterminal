@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>RapidFerry</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-segment color="primary">
+      <ion-segment-button value="island">
+        Island
+      </ion-segment-button>
+      <ion-segment-button value="mainland">
+        Mainland
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list no-border *ngFor="let timetable of timetables">
+    <ion-item-divider color="light" text-center>
+      <h2 *ngIf="timetable.full">
+        <font color="red">Full</font>
+      </h2>
+      <h2 *ngIf="!timetable.full">
+        <font color="green">Available</font>
+      </h2>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-icon name='timer' item-start></ion-icon>
+      Arrival Status
+      <ion-note item-end *ngIf="timetable.on_time" color="primary"> On Time </ion-note>
+      <ion-note item-end *ngIf="!timetable.on_time" color="danger"> Delay </ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name='boat' item-start *ngIf="timetable.on_time" color="primary"></ion-icon>
+      <ion-icon name='boat' item-start *ngIf="!timetable.on_time" color="danger"></ion-icon>
+      Boarding
+      <ion-note item-end>
+        {{ timetable.boarding }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name='boat' item-start color="secondary"></ion-icon>
+      Departure
+      <ion-note item-end>
+        {{ timetable.departure }}
+      </ion-note>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
