@@ -1,3 +1,4 @@
+import { DataApi } from './../../providers/data-api';
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
@@ -8,8 +9,13 @@ import { IonicPage, NavController } from 'ionic-angular';
   templateUrl: 'ferry.html',
 })
 export class Ferry {
+  location: any;
   timetables: any = [];
-  constructor(public navCtrl: NavController) {
+  constructor(
+    public navCtrl: NavController, 
+    private dataApi: DataApi
+  ) {
+    this.location = this.dataApi.get('location');
     this.timetables = [
       {
         boarding: '7.00 am',
@@ -52,6 +58,16 @@ export class Ferry {
         bus: true,
       },
     ];
+  }
+
+  ionViewWillEnter() {
+    if (this.dataApi.get('location')) {
+      this.location = this.dataApi.get('location');
+    } else {
+      this.location = 'PRTU';
+      this.dataApi.update('location', this.location);
+    }
+    console.log(this.location);
   }
 
 }
