@@ -1,3 +1,4 @@
+import { About } from './../about/about';
 import { Settings } from './../settings/settings';
 import { Ferry } from './../ferry/ferry';
 import { Component } from '@angular/core';
@@ -12,6 +13,7 @@ export class TabsPage {
   tab1Root = HomePage;
   tab2Root = Ferry;
   tab3Root = Settings;
+  tab4Root = About;
 
   constructor() {
 

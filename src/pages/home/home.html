@@ -7,11 +7,6 @@
 <ion-content class="tutorial-page" padding>
 
   <ion-slides pager>
-    <ion-slide>
-      <ion-toolbar>
-      </ion-toolbar>
-      <img src="assets/img/logo_subsidiary.png">
-    </ion-slide>
     <ion-slide *ngFor="let timetable of timetables">
       <ion-list>
         <ion-item-divider color="light" text-center>
@@ -21,8 +16,7 @@
         </ion-item-divider>
 
         <ion-item>
-          <ion-icon name='boat' item-start *ngIf="timetable.RouteTimetable.is_on_time" color="primary"></ion-icon>
-          <ion-icon name='boat' item-start *ngIf="!timetable.RouteTimetable.is_on_time" color="danger"></ion-icon>
+          <ion-icon name='boat' item-start color="{{ color-boarding }}"></ion-icon>
           Boarding
           <ion-note item-end *ngIf="location == 'PSAH'">
             {{ timetable.RouteTimetable.boarding_a }}
@@ -33,7 +27,12 @@
         </ion-item>
 
         <ion-item>
-          <ion-icon name='boat' item-start color="secondary"></ion-icon>
+          <ion-label> Full</ion-label>
+          <ion-toggle checked="false" color="danger"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name='boat' item-start color="{{ color-departure }}"></ion-icon>
           Departure
           <ion-note item-end *ngIf="location == 'PSAH'">
             {{ timetable.RouteTimetable.departure_a }}
@@ -42,18 +41,14 @@
             {{ timetable.RouteTimetable.departure_b }}
           </ion-note>
         </ion-item>
-        <ion-item>
-          <ion-label> On Time</ion-label>
-          <ion-toggle checked="true"></ion-toggle>
-        </ion-item>
 
         <ion-item>
-          <ion-label> Full</ion-label>
-          <ion-toggle checked="false" color="danger"></ion-toggle>
+          <ion-label> On Time</ion-label>
+          <ion-toggle checked="true" color="secondary"></ion-toggle>
         </ion-item>
       </ion-list>
       <ion-toolbar>
-        <button ion-button full round color="secondary" (click)="updateTrip(timetable)">Confirm</button>
+        <button ion-button full round color="primary" (click)="updateTrip(timetable)">Confirm</button>
       </ion-toolbar>
 
     </ion-slide>
