@@ -13,10 +13,11 @@
           <h2>
             <font>{{location}}: {{ timetable.Route.name }}</font>
           </h2>
+          <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
         </ion-item-divider>
 
         <ion-item>
-          <ion-icon name='boat' item-start color="{{ color-boarding }}"></ion-icon>
+          <ion-icon name='boat' item-start color="{{ color_boarding }}"></ion-icon>
           Boarding
           <ion-note item-end *ngIf="location == 'PSAH'">
             {{ timetable.RouteTimetable.boarding_a }}
@@ -27,12 +28,11 @@
         </ion-item>
 
         <ion-item>
-          <ion-label> Full</ion-label>
-          <ion-toggle checked="false" color="danger"></ion-toggle>
+          <ion-label> Full Load</ion-label>
+          <ion-toggle [(ngModel)]="full" color="danger" (ionChange)="changeFullColor()"></ion-toggle>
         </ion-item>
-
         <ion-item>
-          <ion-icon name='boat' item-start color="{{ color-departure }}"></ion-icon>
+          <ion-icon name='boat' item-start color="{{ color_departure }}"></ion-icon>
           Departure
           <ion-note item-end *ngIf="location == 'PSAH'">
             {{ timetable.RouteTimetable.departure_a }}
@@ -43,9 +43,20 @@
         </ion-item>
 
         <ion-item>
-          <ion-label> On Time</ion-label>
-          <ion-toggle checked="true" color="secondary"></ion-toggle>
+          <ion-icon name='timer' item-start color="{{ color_departure }}"></ion-icon>
+          Actual Time
+          <p></p>
+          <ion-note item-end>
+            {{ time_depart | date:'HH:mm' }}
+          </ion-note>
         </ion-item>
+
+        <ion-item>
+          <ion-label> Departure Status</ion-label>
+          <p>{{ time_depart}}</p>
+          <ion-toggle [(ngModel)]="ontime" color="secondary" (ionChange)="changeOntimeColor()"></ion-toggle>
+        </ion-item>
+
       </ion-list>
       <ion-toolbar>
         <button ion-button full round color="primary" (click)="updateTrip(timetable)">Confirm</button>

@@ -17,5 +17,9 @@
 
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>Service</ion-label>
+      <ion-datetime displayFormat="DDDD, DD MMMM YYYY" pickerFormat="DD-MM-YYYY" [(ngModel)]="service_date" (ionChange)="displayServiceDate()"></ion-datetime>
+    </ion-item>
   </ion-list>
 </ion-content>
