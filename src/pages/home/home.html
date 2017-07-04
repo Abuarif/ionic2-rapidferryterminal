@@ -29,7 +29,7 @@
 
         <ion-item>
           <ion-label> Full Load</ion-label>
-          <ion-toggle [(ngModel)]="full" color="danger" (ionChange)="changeFullColor()"></ion-toggle>
+          <ion-toggle [(ngModel)]="timetable.RouteTimetable.is_full" color="danger" (ionChange)="changeFullColor(timetable)"></ion-toggle>
         </ion-item>
         <ion-item>
           <ion-icon name='boat' item-start color="{{ color_departure }}"></ion-icon>
@@ -47,19 +47,22 @@
           Actual Time
           <p></p>
           <ion-note item-end>
-            {{ time_depart | date:'HH:mm' }}
+            {{ time_depart | date:'HH:mm' }} {{ timetable.trip.time_depart | date:'HH:mm' }}
           </ion-note>
         </ion-item>
 
         <ion-item>
           <ion-label> Departure Status</ion-label>
-          <p>{{ time_depart}}</p>
-          <ion-toggle [(ngModel)]="ontime" color="secondary" (ionChange)="changeOntimeColor()"></ion-toggle>
+          <ion-toggle [(ngModel)]="timetable.trip.isOnTime" color="secondary" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
         </ion-item>
 
       </ion-list>
       <ion-toolbar>
-        <button ion-button full round color="primary" (click)="updateTrip(timetable)">Confirm</button>
+        <button ion-button full round color="{{ timetable.trip. }}" 
+         *ngIf="allowSubmission(timetable)" 
+        (click)="updateTrip(timetable)"> 
+          {{ submission_label }} 
+        </button>
       </ion-toolbar>
 
     </ion-slide>
