@@ -1,3 +1,4 @@
+import { Trip } from './../pages/trip/trip';
 import { About } from './../pages/about/about';
 import { Settings } from './../pages/settings/settings';
 import { Ferry } from './../pages/ferry/ferry';
@@ -22,6 +23,7 @@ import { DatePipe } from '@angular/common';
     About,
     HomePage,
     Ferry,
+    Trip,
     Settings,
     TabsPage
   ],
@@ -36,6 +38,7 @@ import { DatePipe } from '@angular/common';
     About,
     HomePage,
     Ferry,
+    Trip,
     Settings,
     TabsPage
   ],
