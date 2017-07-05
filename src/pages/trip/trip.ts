@@ -35,12 +35,7 @@ export class Trip {
     this.route_id = this.timetable.FerryRoute.id;
     this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
     this.location_id = this.timetable.FerryRoute.location_id;
-    
-    if (this.location == 'PSTU') {
-      this.time_depart = this.timetable.FerryRoute.departure_b;
-    } else if (this.location == 'PSAH') {
-      this.time_depart = this.timetable.FerryRoute.departure_a;
-    }
+
     console.log(this.timetable);
 
     if (this.dataApi.get('location')) {
@@ -50,7 +45,12 @@ export class Trip {
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
-
+    
+    if (this.location == 'PSTU') {
+      this.time_depart = this.service_date + ' ' + this.timetable.FerryRoute.departure_b;
+    } else if (this.location == 'PSAH') {
+      this.time_depart = this.service_date + ' ' + this.timetable.FerryRoute.departure_a;
+    }
   }
 
   ionViewWillUnload() {
