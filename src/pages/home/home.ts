@@ -1,4 +1,4 @@
-import { Route } from './../../models/busroutes';
+import { Trip } from './../trip/trip';
 import { DataApi } from './../../providers/data-api';
 import { Ferrytrips } from './../../models/ferrytrips';
 import { Component } from '@angular/core';
@@ -11,15 +11,17 @@ import { Api } from "../../providers/api";
   templateUrl: 'home.html'
 })
 export class HomePage {
-  full: boolean = false;
   color_boarding: string = 'dark';
-  ontime: boolean = false;
   color_departure: string = 'dark';
   slides: Promotions[] = new Array();
   timetables: Ferrytrips[] = new Array();
   location: string;
-  service_date: string;
+  service_date: string = new Date().toISOString();
   time_depart: string;
+  submission_color: string;
+  submission_label: string;
+  is_ontime: boolean;
+  is_full: boolean;
 
   constructor(
     public _loadingController: LoadingController,
@@ -30,9 +32,16 @@ export class HomePage {
     private dataApi: DataApi) { }
 
   ionViewWillEnter() {
-    this.location = this.dataApi.get('location');
-    this.service_date = this.dataApi.get('service_date');
+    if (this.dataApi.get('location')) {
+      this.location = this.dataApi.get('location');
+    }
+
+    if (this.dataApi.get('service_date')) {
+      this.service_date = this.dataApi.get('service_date');
+    } 
     this.getFerryTimetables();
+
+    console.log(this.timetables);
     console.log(this.location);
   }
 
@@ -44,7 +53,7 @@ export class HomePage {
 
     loading.present();
 
-    this.api.get_ferrytrips()
+    this.api.get_ferrytrips(this.location)
       .then((result) => {
         loading.dismiss();
         this.timetables = <Ferrytrips[]>result;
@@ -77,33 +86,35 @@ export class HomePage {
 
   public updateTrip(timetable: any) {
     console.log(timetable);
-    console.log(this.full);
-    console.log(this.ontime);
+    console.log(timetable.RouteTimetable.is_full);
+    console.log(timetable.RouteTimetable.is_ontime);
     let location = this.location;
     let route_id = timetable.Route.id;
     let route_timetable_id = timetable.RouteTimetable.id;
     let service_date = this.service_date;
-    let isOnTime = this.ontime;
-    let isAvailable = this.full;
+    let isOnTime = timetable.RouteTrip.is_ontime;
+    let isAvailable = timetable.RouteTrip.is_full;
+    let time_depart = timetable.RouteTrip.time_depart;
 
-    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, this.time_depart);
+    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart);
   }
 
-  changeFullColor() {
-    if (this.full) {
-      this.color_boarding = 'danger';
+  changeFullColor(trip) {
+    if (this.is_full) {
+      trip.RouteTrip.color_full = 'danger';
     } else {
-      this.color_boarding = 'dark';
+      trip.RouteTrip.color_full = 'dark';
     }
   }
 
-  changeOntimeColor() {
-    if (this.ontime) {
-      this.color_departure = 'secondary';
+  changeOntimeColor(trip) {
+    if (this.is_ontime) {
+      trip.RouteTrip.color_ontime = 'secondary';
     } else {
-      this.color_departure = 'dark';
+      trip.RouteTrip.color_ontime = 'dark';
     }
-    this.time_depart = new Date().toISOString();
+
+    trip.RouteTrip.time_depart = new Date().toISOString();
   }
 
   private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart) {
@@ -112,19 +123,50 @@ export class HomePage {
       duration: 3000
     });
 
-    loading.present();  
+    loading.present();
 
     this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart)
       .then((result) => {
         loading.dismiss();
-        // this.timetables = <Ferrytrips[]>result;
-        console.log(this.timetables);
+        this.getFerryTimetables();
       }, (err) => {
         loading.dismiss();
         this.presentConfirm();
       });
   }
 
-  
+  public allowSubmission(timetable) {
+
+    if (timetable.RouteTrip.length == 0) {
+      console.log('new');
+      this.submission_color = 'secondary';
+      this.submission_label = 'Submit Now';
+      return true;
+    } else if (timetable.RouteTrip.length > 0) {
+      // check for location
+      for (let trip of timetable.RouteTrip) {
+        if (trip.location_id == 1 && this.location == 'PSAH' && trip.status == true) {
+          console.log('submitted PSAH');
+          this.submission_color = 'light';
+          this.submission_label = 'Submitted';
+          return true;
+        } else if (trip.location_id == 2 && this.location == 'PRTU' && trip.status == true) {
+          console.log('submitted PRTU');
+          this.submission_color = 'light';
+          this.submission_label = 'Submitted';
+          return true;
+        } else {
+          console.log('new');
+          this.submission_color = 'secondary';
+          this.submission_label = 'Submit Now';
+          return false;
+        }
+      }
+    }
+  }
+
+  public getDetail(timetable) {
+    this.navCtrl.push(Trip, {trip: timetable});
+  }
 }
 

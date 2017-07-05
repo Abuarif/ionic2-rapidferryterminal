@@ -5,67 +5,49 @@
 </ion-header>
 
 <ion-content class="tutorial-page" padding>
+  <ion-list>
+    <ion-item-divider color="light" text-center>
+      <h2>
+        <font>{{location}}</font>
+      </h2>
+      <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
+    </ion-item-divider>
+  </ion-list>
 
-  <ion-slides pager>
-    <ion-slide *ngFor="let timetable of timetables">
-      <ion-list>
-        <ion-item-divider color="light" text-center>
-          <h2>
-            <font>{{location}}: {{ timetable.Route.name }}</font>
-          </h2>
-          <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
-        </ion-item-divider>
+  <ion-list inset>
+    <ion-item-divider >
+      <ion-note>
+        Full
+      </ion-note>
+      <ion-note>
+        On Time
+      </ion-note>
+      <ion-note item-end>
+        Boarding
+      </ion-note>
+      <ion-note item-end>
+        Departure
+      </ion-note>
+    </ion-item-divider>
+    <ion-item *ngFor="let timetable of timetables" (click)="getDetail(timetable)">
+      <ion-icon name='boat' item-start color="{{ timetable.RouteTrip.color_isFull }}"></ion-icon>
+      <ion-icon name='timer' item-start color="{{ timetable.RouteTrip.color_isOntime }}"></ion-icon>
+      <ion-note item-end *ngIf="location == 'PSAH'">
+        {{ timetable.RouteTimetable.boarding_a }}
+      </ion-note>
+      <ion-note item-end *ngIf="location == 'PRTU'">
+        {{ timetable.RouteTimetable.boarding_b }}
+      </ion-note>
 
-        <ion-item>
-          <ion-icon name='boat' item-start color="{{ color_boarding }}"></ion-icon>
-          Boarding
-          <ion-note item-end *ngIf="location == 'PSAH'">
-            {{ timetable.RouteTimetable.boarding_a }}
-          </ion-note>
-          <ion-note item-end *ngIf="location == 'PRTU'">
-            {{ timetable.RouteTimetable.boarding_b }}
-          </ion-note>
-        </ion-item>
+      <ion-note item-end *ngIf="location == 'PSAH'">
+        {{ timetable.RouteTimetable.departure_a }}
+      </ion-note>
+      <ion-note item-end *ngIf="location == 'PRTU'">
+        {{ timetable.RouteTimetable.departure_b }}
+      </ion-note>
 
-        <ion-item>
-          <ion-label> Full Load</ion-label>
-          <ion-toggle [(ngModel)]="timetable.RouteTimetable.is_full" color="danger" (ionChange)="changeFullColor(timetable)"></ion-toggle>
-        </ion-item>
-        <ion-item>
-          <ion-icon name='boat' item-start color="{{ color_departure }}"></ion-icon>
-          Departure
-          <ion-note item-end *ngIf="location == 'PSAH'">
-            {{ timetable.RouteTimetable.departure_a }}
-          </ion-note>
-          <ion-note item-end *ngIf="location == 'PRTU'">
-            {{ timetable.RouteTimetable.departure_b }}
-          </ion-note>
-        </ion-item>
+    </ion-item>
 
-        <ion-item>
-          <ion-icon name='timer' item-start color="{{ color_departure }}"></ion-icon>
-          Actual Time
-          <p></p>
-          <ion-note item-end>
-            {{ time_depart | date:'HH:mm' }} {{ timetable.trip.time_depart | date:'HH:mm' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          <ion-label> Departure Status</ion-label>
-          <ion-toggle [(ngModel)]="timetable.trip.isOnTime" color="secondary" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
-        </ion-item>
-
-      </ion-list>
-      <ion-toolbar>
-        <button ion-button full round color="{{ timetable.trip. }}" 
-         *ngIf="allowSubmission(timetable)" 
-        (click)="updateTrip(timetable)"> 
-          {{ submission_label }} 
-        </button>
-      </ion-toolbar>
-
-    </ion-slide>
-  </ion-slides>
+  </ion-list>
 
 </ion-content>
