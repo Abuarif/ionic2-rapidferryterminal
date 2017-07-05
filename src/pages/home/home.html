@@ -1,10 +1,16 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Ferry Terminal</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="tutorial-page" padding>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
     <ion-item-divider color="light" text-center>
       <h2>
@@ -12,15 +18,10 @@
       </h2>
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
-  </ion-list>
-
-  <ion-list inset>
-    <ion-item-divider >
+    
+    <ion-item-divider>
       <ion-note>
-        Full
-      </ion-note>
-      <ion-note>
-        On Time
+        Status
       </ion-note>
       <ion-note item-end>
         Boarding
@@ -30,20 +31,19 @@
       </ion-note>
     </ion-item-divider>
     <ion-item *ngFor="let timetable of timetables" (click)="getDetail(timetable)">
-      <ion-icon name='boat' item-start color="{{ timetable.RouteTrip.color_isFull }}"></ion-icon>
-      <ion-icon name='timer' item-start color="{{ timetable.RouteTrip.color_isOntime }}"></ion-icon>
+      <ion-icon name='boat' item-start></ion-icon>
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.RouteTimetable.boarding_a }}
+        {{ timetable.FerryRoute.boarding_a }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.RouteTimetable.boarding_b }}
+        {{ timetable.FerryRoute.boarding_b }}
       </ion-note>
 
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.RouteTimetable.departure_a }}
+        {{ timetable.FerryRoute.departure_a }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.RouteTimetable.departure_b }}
+        {{ timetable.FerryRoute.departure_b }}
       </ion-note>
 
     </ion-item>

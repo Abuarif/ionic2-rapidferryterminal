@@ -1,12 +1,6 @@
-<!--
-  Generated template for the Trip page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Trip Details</ion-title>
   </ion-navbar>
 
@@ -21,40 +15,61 @@
       </h2>
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
-  </ion-list>
-
-  <ion-list>
-
-    <ion-item>
-      <ion-icon name='boat' item-start color="{{ color-boarding }}"></ion-icon>
+    <ion-item-divider>
       Boarding
+    </ion-item-divider>
+    <ion-item>
+      <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
+      Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.RouteTimetable.boarding_a }}
+        {{ timetable.FerryRoute.boarding_a }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.RouteTimetable.boarding_b }}
+        {{ timetable.FerryRoute.boarding_b }}
       </ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-label> Available</ion-label>
+      <ion-toggle [(ngModel)]="!isFull" color="secondary" (ionChange)="changeFullColor(timetable)"></ion-toggle>
     </ion-item>
 
     <ion-item>
       <ion-label> Full</ion-label>
-      <ion-toggle checked="false" color="danger"></ion-toggle>
+      <ion-toggle [(ngModel)]="isFull" color="danger" ></ion-toggle>
     </ion-item>
-
-    <ion-item>
-      <ion-icon name='timer' item-start color="{{ color-departure }}"></ion-icon>
+    <ion-item-divider>
       Departure
+    </ion-item-divider>
+    <ion-item>
+      <ion-icon name='timer' item-start color="{{ color_isOnTime }}"></ion-icon>
+      Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.RouteTimetable.departure_a }}
+        {{ timetable.FerryRoute.departure_a }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.RouteTimetable.departure_b }}
+        {{ timetable.FerryRoute.departure_b }}
       </ion-note>
     </ion-item>
 
     <ion-item>
-      <ion-label> On Time</ion-label>
-      <ion-toggle checked="true" color="secondary"></ion-toggle>
+      <ion-icon name='speedometer' item-start color="{{ color_isOnTime }}"></ion-icon>
+      Actual
+      <ion-note item-end>
+        {{ time_depart | date: 'HH:mm:ss'}}
+      </ion-note>
     </ion-item>
+
+    <ion-item>
+      <ion-label>On Time</ion-label>
+      <ion-toggle [(ngModel)]="isOnTime" color="secondary" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Delay</ion-label>
+      <ion-toggle [(ngModel)]="!isOnTime" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+    </ion-item>
+
   </ion-list>
+
 </ion-content>

@@ -56,5 +56,18 @@ export class Api {
     });
   }
 
+  public get_ferryroutes(location) {
+    console.log('get_ferryroutes');
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/get_ferryroutes.json?location=' + location)
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
   
 }

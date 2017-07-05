@@ -38,7 +38,7 @@ export class HomePage {
 
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
-    } 
+    }
     this.getFerryTimetables();
 
     console.log(this.timetables);
@@ -53,7 +53,7 @@ export class HomePage {
 
     loading.present();
 
-    this.api.get_ferrytrips(this.location)
+    this.api.get_ferryroutes(this.location)
       .then((result) => {
         loading.dismiss();
         this.timetables = <Ferrytrips[]>result;
@@ -64,6 +64,20 @@ export class HomePage {
       });
   }
 
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.api.get_ferryroutes(this.location)
+        .then((result) => {
+          this.timetables = <Ferrytrips[]>result;
+          console.log(this.timetables);
+        }, (err) => {
+        });
+      refresher.complete();
+    }, 2000);
+  }
   presentConfirm() {
     let alert = this.alertCtrl.create({
       title: 'No Internet Connection!',
@@ -82,57 +96,6 @@ export class HomePage {
 
   private exitApp() {
     this.platform.exitApp();
-  }
-
-  public updateTrip(timetable: any) {
-    console.log(timetable);
-    console.log(timetable.RouteTimetable.is_full);
-    console.log(timetable.RouteTimetable.is_ontime);
-    let location = this.location;
-    let route_id = timetable.Route.id;
-    let route_timetable_id = timetable.RouteTimetable.id;
-    let service_date = this.service_date;
-    let isOnTime = timetable.RouteTrip.is_ontime;
-    let isAvailable = timetable.RouteTrip.is_full;
-    let time_depart = timetable.RouteTrip.time_depart;
-
-    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart);
-  }
-
-  changeFullColor(trip) {
-    if (this.is_full) {
-      trip.RouteTrip.color_full = 'danger';
-    } else {
-      trip.RouteTrip.color_full = 'dark';
-    }
-  }
-
-  changeOntimeColor(trip) {
-    if (this.is_ontime) {
-      trip.RouteTrip.color_ontime = 'secondary';
-    } else {
-      trip.RouteTrip.color_ontime = 'dark';
-    }
-
-    trip.RouteTrip.time_depart = new Date().toISOString();
-  }
-
-  private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart) {
-    let loading = this._loadingController.create({
-      content: "Please wait...",
-      duration: 3000
-    });
-
-    loading.present();
-
-    this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart)
-      .then((result) => {
-        loading.dismiss();
-        this.getFerryTimetables();
-      }, (err) => {
-        loading.dismiss();
-        this.presentConfirm();
-      });
   }
 
   public allowSubmission(timetable) {
@@ -166,7 +129,7 @@ export class HomePage {
   }
 
   public getDetail(timetable) {
-    this.navCtrl.push(Trip, {trip: timetable});
+    this.navCtrl.push(Trip, { trip: timetable });
   }
 }
 
