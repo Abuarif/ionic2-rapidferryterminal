@@ -22,11 +22,11 @@ export class Api {
     });
   }
 
-  public get_ferrytrips() {
+  public get_ferrytrips(location) {
     console.log('get_ferrytrips');
     return new Promise((resolve, reject) => {
 
-      this.http.get(this.serverPath + '/api/get_ferrytrips.json')
+      this.http.get(this.serverPath + '/api/get_ferrytrips.json?location=' + location)
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {
