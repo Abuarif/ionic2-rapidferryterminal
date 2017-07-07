@@ -35,18 +35,18 @@ export class Api {
     });
   }
 
-  public set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart) {
+  public set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
     console.log('set_ferrytrips');
     return new Promise((resolve, reject) => {
 
       this.http.get(this.serverPath + '/api/set_ferrytrip.json?' +
-      'location='           + location + 
+      'location='            + location + 
       '&route_id='           + route_id + 
       '&route_timetable_id=' + route_timetable_id + 
       '&service_date='       + this.datePipe.transform(service_date, 'yyyy-MM-dd') + 
       '&isOnTime='           + isOnTime + 
       '&time_depart='        + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm:ss') + 
-      '&isAvailable='        + isAvailable 
+      '&isFull='             + isFull 
       )
         .subscribe(res => {
           resolve(res.json());

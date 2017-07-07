@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Api } from './../../providers/api';
 import { DataApi } from './../../providers/data-api';
 import { Component } from '@angular/core';
@@ -27,7 +28,8 @@ export class Trip {
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     public NavParams: NavParams,
-    private dataApi: DataApi) {
+    private dataApi: DataApi,
+    private datePipe: DatePipe) {
   }
 
   ionViewWillEnter() {
@@ -45,18 +47,17 @@ export class Trip {
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
-    
+    this.update_time_depart();
+    console.log(this.time_depart);
+  }
+
+  update_time_depart() {
     if (this.location == 'PSTU') {
-      this.time_depart = this.service_date + ' ' + this.timetable.FerryRoute.departure_b;
+      this.time_depart = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + ' ' + this.timetable.FerryRoute.departure_b;
     } else if (this.location == 'PSAH') {
-      this.time_depart = this.service_date + ' ' + this.timetable.FerryRoute.departure_a;
+      this.time_depart = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + ' ' + this.timetable.FerryRoute.departure_a;
     }
   }
-
-  ionViewWillUnload() {
-    //  save all data
-  }
-
   public updateTrip() {
 
     let location = this.location;
@@ -64,13 +65,20 @@ export class Trip {
     let route_timetable_id = this.route_timetable_id;
     let service_date = this.service_date;
     let isOnTime = this.isOnTime;
-    let isAvailable = this.isFull;
+    let isFull = this.isFull;
     let time_depart = this.time_depart;
 
-    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart);
+    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart);
+    console.log(location);
+    console.log(route_id);
+    console.log(route_timetable_id);
+    console.log(service_date);
+    console.log(isOnTime);
+    console.log(isFull);
+    console.log(time_depart);
   }
 
-  private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart) {
+  private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
     let loading = this._loadingController.create({
       content: "Please wait...",
       duration: 3000
@@ -78,7 +86,7 @@ export class Trip {
 
     loading.present();
 
-    this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isAvailable, time_depart)
+    this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart)
       .then((result) => {
         loading.dismiss();
       }, (err) => {
@@ -99,10 +107,11 @@ export class Trip {
 
     if (this.isOnTime) {
       this.color_isOnTime = 'secondary';
+      this.update_time_depart();
     } else {
       this.color_isOnTime = 'danger';
+      this.time_depart = this.datePipe.transform(new Date().toISOString(), 'yyyy-MM-dd HH:mm')
     }
-    this.time_depart = new Date().toISOString();
     this.updateTrip();
   }
 }
