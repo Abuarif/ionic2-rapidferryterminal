@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
 import { DataApi } from './../../providers/data-api';
 import { Ferrytrips } from './../../models/ferrytrips';
@@ -29,7 +31,9 @@ export class HomePage {
     private alertCtrl: AlertController,
     private platform: Platform,
     private navCtrl: NavController,
-    private dataApi: DataApi) { }
+    private dataApi: DataApi,
+    private datePipe: DatePipe
+  ) { }
 
   ionViewWillEnter() {
     if (this.dataApi.get('location')) {
@@ -39,10 +43,8 @@ export class HomePage {
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
+    
     this.getFerryTimetables();
-
-    console.log(this.timetables);
-    console.log(this.location);
   }
 
   private getFerryTimetables() {
@@ -52,6 +54,11 @@ export class HomePage {
     });
 
     loading.present();
+
+    if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
+      this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
+      this.checkServiceDate();
+    }
 
     this.api.get_ferryroutes(this.location)
       .then((result) => {
@@ -87,6 +94,30 @@ export class HomePage {
           text: 'Close',
           handler: () => {
             this.exitApp();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  checkServiceDate() {
+    let alert = this.alertCtrl.create({
+      title: 'Service Date Verification!',
+      message: 'Your current service date is not updated (' +
+      this.datePipe.transform(this.service_date, 'dd-MMM-yyyy') +
+      '). <br/><br/>Click <b>Change</b> to proceed.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Change',
+          handler: data => {
+            this.navCtrl.push(Settings);
           }
         }
       ]

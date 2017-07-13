@@ -1,3 +1,5 @@
+import { FerryRoute } from './../../models/ferryroute';
+import { Output } from './../../models/output';
 import { DatePipe } from '@angular/common';
 import { Api } from './../../providers/api';
 import { DataApi } from './../../providers/data-api';
@@ -21,6 +23,8 @@ export class Trip {
   route_id: string;
   route_timetable_id: string;
   location_id: string;
+  output : Output;
+  submitLabel: string = "Submit";
 
   constructor(
     public _loadingController: LoadingController,
@@ -37,6 +41,10 @@ export class Trip {
     this.route_id = this.timetable.FerryRoute.id;
     this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
     this.location_id = this.timetable.FerryRoute.location_id;
+    this.isFull = this.timetable.FerryRoute.isFull;
+    this.isOnTime = this.timetable.FerryRoute.isOnTime;
+    this.color_isFull = this.timetable.FerryRoute.color_isFull;
+    this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
 
     console.log(this.timetable);
 
@@ -49,14 +57,17 @@ export class Trip {
     }
     this.update_time_depart();
     console.log(this.time_depart);
+    console.log(this.timetable);
   }
 
   update_time_depart() {
-    if (this.location == 'PSTU') {
-      this.time_depart = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + ' ' + this.timetable.FerryRoute.departure_b;
+    let myTime = '';
+    if (this.location == 'PRTU') {
+      myTime = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + 'T' + this.timetable.FerryRoute.departure_b + ':00';
     } else if (this.location == 'PSAH') {
-      this.time_depart = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + ' ' + this.timetable.FerryRoute.departure_a;
+      myTime = this.datePipe.transform(this.service_date, 'yyyy-MM-dd') + 'T' + this.timetable.FerryRoute.departure_a + ':00';
     }
+      this.time_depart = myTime;
   }
   public updateTrip() {
 
@@ -64,18 +75,18 @@ export class Trip {
     let route_id = this.route_id;
     let route_timetable_id = this.route_timetable_id;
     let service_date = this.service_date;
-    let isOnTime = this.isOnTime;
-    let isFull = this.isFull;
+    let isOnTime = 0;
+    let isFull = 0;
     let time_depart = this.time_depart;
+    if (this.isFull) {
+      isFull = 1;
+    } 
+
+    if (this.isOnTime) {
+      isOnTime = 1;
+    } 
 
     this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart);
-    console.log(location);
-    console.log(route_id);
-    console.log(route_timetable_id);
-    console.log(service_date);
-    console.log(isOnTime);
-    console.log(isFull);
-    console.log(time_depart);
   }
 
   private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
@@ -88,9 +99,18 @@ export class Trip {
 
     this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart)
       .then((result) => {
+        this.output = <Output> result;
         loading.dismiss();
+        console.log(result);
+        if (this.output.result == 'ok') {
+          this.acknowledge(this.output.message);
+          this.submitLabel = 'Resubmit';
+        } else {
+          this.acknowledge(this.output.message);
+        }
       }, (err) => {
         loading.dismiss();
+        console.log(err);
       });
   }
 
@@ -100,7 +120,7 @@ export class Trip {
     } else {
       this.color_isFull = 'secondary';
     }
-    this.updateTrip();
+    // this.updateTrip();
   }
 
   changeOntimeColor() {
@@ -112,6 +132,23 @@ export class Trip {
       this.color_isOnTime = 'danger';
       this.time_depart = this.datePipe.transform(new Date().toISOString(), 'yyyy-MM-dd HH:mm')
     }
-    this.updateTrip();
+    // this.updateTrip();
+  }
+
+  acknowledge(message) {
+    let alert = this.alertCtrl.create({
+      title: 'Submission Notification!',
+      message: message,
+      buttons: [
+        {
+          text: 'Dismiss',
+          handler: data => {
+            console.log('Cancel clicked');
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }

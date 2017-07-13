@@ -18,7 +18,7 @@
       </h2>
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
-    
+
     <ion-item-divider>
       <ion-note>
         Status
@@ -31,7 +31,8 @@
       </ion-note>
     </ion-item-divider>
     <ion-item *ngFor="let timetable of timetables" (click)="getDetail(timetable)">
-      <ion-icon name='boat' item-start></ion-icon>
+      <ion-icon name='boat' item-start color="{{ timetable.FerryRoute.color_isFull}}"></ion-icon>
+      <ion-icon name='timer' item-start color="{{ timetable.FerryRoute.color_isOnTime}}"></ion-icon>
       <ion-note item-end *ngIf="location == 'PSAH'">
         {{ timetable.FerryRoute.boarding_a }}
       </ion-note>

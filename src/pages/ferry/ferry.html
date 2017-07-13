@@ -1,44 +1,52 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Location: {{ location }}</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Ferry Terminal</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-<ion-content padding>
+<ion-content class="tutorial-page" padding>
 
-  <ion-list no-border *ngFor="let timetable of timetables">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
     <ion-item-divider color="light" text-center>
-      <h2 *ngIf="timetable.full">
-        <font color="red">Full</font>
+      <h2>
+        <font>{{location}}</font>
       </h2>
-      <h2 *ngIf="!timetable.full">
-        <font color="green">Available</font>
-      </h2>
+      <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
 
-    <ion-item>
-      <ion-icon name='timer' item-start></ion-icon>
-      Arrival Status
-      <ion-note item-end *ngIf="timetable.on_time" color="primary"> On Time </ion-note>
-      <ion-note item-end *ngIf="!timetable.on_time" color="danger"> Delay </ion-note>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='boat' item-start *ngIf="timetable.on_time" color="primary"></ion-icon>
-      <ion-icon name='boat' item-start *ngIf="!timetable.on_time" color="danger"></ion-icon>
-      Boarding
-      <ion-note item-end>
-        {{ timetable.boarding }}
+    <ion-item-divider>
+      <ion-note>
+        Status
       </ion-note>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='boat' item-start color="secondary"></ion-icon>
-      Departure
       <ion-note item-end>
-        {{ timetable.departure }}
+        Boarding
       </ion-note>
+      <ion-note item-end>
+        Departure
+      </ion-note>
+    </ion-item-divider>
+    <ion-item *ngFor="let timetable of timetables" (click)="getDetail(timetable)">
+      <ion-icon name='boat' item-start color="{{ timetable.FerryRoute.color_isFull}}"></ion-icon>
+      <ion-icon name='timer' item-start color="{{ timetable.FerryRoute.color_isOnTime}}"></ion-icon>
+      <ion-note item-end *ngIf="location == 'PSAH'">
+        {{ timetable.FerryRoute.boarding_a }}
+      </ion-note>
+      <ion-note item-end *ngIf="location == 'PRTU'">
+        {{ timetable.FerryRoute.boarding_b }}
+      </ion-note>
+
+      <ion-note item-end *ngIf="location == 'PSAH'">
+        {{ timetable.FerryRoute.departure_a }}
+      </ion-note>
+      <ion-note item-end *ngIf="location == 'PRTU'">
+        {{ timetable.FerryRoute.departure_b }}
+      </ion-note>
+
     </ion-item>
 
   </ion-list>
