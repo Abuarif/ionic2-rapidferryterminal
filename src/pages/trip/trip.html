@@ -22,10 +22,10 @@
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
       Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.boarding_a }}
+        {{ timetable.FerryRoute.boarding_a | date:'hh:mm a'}}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.boarding_b }}
+        {{ timetable.FerryRoute.boarding_b | date:'hh:mm a'}}
       </ion-note>
     </ion-item>
 
@@ -45,10 +45,10 @@
       <ion-icon name='timer' item-start color="{{ color_isOnTime }}"></ion-icon>
       Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.departure_a }}
+        {{ timetable.FerryRoute.departure_a | date:'hh:mm a'}}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.departure_b }}
+        {{ timetable.FerryRoute.departure_b | date:'hh:mm a'}}
       </ion-note>
     </ion-item>
 
@@ -56,7 +56,7 @@
       <ion-icon name='speedometer' item-start color="{{ color_isOnTime }}"></ion-icon>
       Actual
       <ion-note item-end>
-        {{ time_depart }}
+        {{ time_depart | date:'hh:mm a'}}
       </ion-note>
     </ion-item>
 

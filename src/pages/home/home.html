@@ -34,17 +34,17 @@
       <ion-icon name='boat' item-start color="{{ timetable.FerryRoute.color_isFull}}"></ion-icon>
       <ion-icon name='timer' item-start color="{{ timetable.FerryRoute.color_isOnTime}}"></ion-icon>
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.boarding_a }}
+        {{ timetable.FerryRoute.boarding_a | date:'hh:mm a' }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.boarding_b }}
+        {{ timetable.FerryRoute.boarding_b | date:'hh:mm a' }}
       </ion-note>
 
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.departure_a }}
+        {{ timetable.FerryRoute.departure_a | date:'hh:mm a' }}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.departure_b }}
+        {{ timetable.FerryRoute.departure_b | date:'hh:mm a' }}
       </ion-note>
 
     </ion-item>

@@ -9,10 +9,10 @@ export class Route {
 }
 export class RouteTimetable {
     id: number;
-    departure_a: string;
-    boarding_a: string;
-    departure_b: string;
-    boarding_b: string;
+    departure_a: any;
+    boarding_a: any;
+    departure_b: any;
+    boarding_b: any;
     status: boolean;
     isOnTime: boolean;
     isFull: boolean;

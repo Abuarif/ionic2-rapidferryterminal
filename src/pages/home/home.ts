@@ -16,7 +16,8 @@ export class HomePage {
   color_boarding: string = 'dark';
   color_departure: string = 'dark';
   slides: Promotions[] = new Array();
-  timetables: Ferrytrips[] = new Array();
+  timetables: any = new Array();
+  // timetables: Ferrytrips[] = new Array();
   location: string;
   service_date: string = new Date().toISOString();
   time_depart: string;
@@ -43,17 +44,34 @@ export class HomePage {
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
-    
+
     this.getFerryTimetables();
   }
 
-  private getFerryTimetables() {
-    let loading = this._loadingController.create({
-      content: "Please wait...",
-      duration: 3000
-    });
+  // ngOnInit() {
+  //   if (this.dataApi.get('location')) {
+  //     this.location = this.dataApi.get('location');
+  //   }
 
-    loading.present();
+  //   if (this.dataApi.get('service_date')) {
+  //     this.service_date = this.dataApi.get('service_date');
+  //   }
+
+  //   this.getFerryTimetables();
+  //   setInterval(
+  //     () => {
+  //       this.getFerryTimetables();
+  //     }, 5000 // refresh to check new data for every 5 seconds.
+  //   )
+  // }
+
+  private getFerryTimetables() {
+    // let loading = this._loadingController.create({
+    //   content: "Please wait...",
+    //   duration: 3000
+    // });
+
+    // loading.present();
 
     if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
       this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
@@ -62,11 +80,14 @@ export class HomePage {
 
     this.api.get_ferryroutes(this.location)
       .then((result) => {
-        loading.dismiss();
-        this.timetables = <Ferrytrips[]>result;
+        // loading.dismiss();
+        this.timetables = result;
+        // this.timetables = <Ferrytrips[]>result;
         console.log(this.timetables);
+        this.parseTrip();
+        // console.log(this.timetables);
       }, (err) => {
-        loading.dismiss();
+        // loading.dismiss();
         this.presentConfirm();
       });
   }
@@ -85,6 +106,7 @@ export class HomePage {
       refresher.complete();
     }, 2000);
   }
+
   presentConfirm() {
     let alert = this.alertCtrl.create({
       title: 'No Internet Connection!',
@@ -162,5 +184,17 @@ export class HomePage {
   public getDetail(timetable) {
     this.navCtrl.push(Trip, { trip: timetable });
   }
+
+  private parseTrip() {
+    this.timetables.forEach(element => {
+      let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
+
+      element.FerryRoute.boarding_a = service_date + 'T' + element.FerryRoute.boarding_a + ':00.000+08:00'
+      element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
+      element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
+      element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+    });
+  }
 }
+
 
