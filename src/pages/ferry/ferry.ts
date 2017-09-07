@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
 import { DataApi } from './../../providers/data-api';
-import { Ferrytrips } from './../../models/ferrytrips';
+// import { Ferrytrips } from './../../models/ferrytrips';
 import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { Promotions } from "../../models/promotions";
@@ -16,7 +16,9 @@ export class Ferry {
   color_boarding: string = 'dark';
   color_departure: string = 'dark';
   slides: Promotions[] = new Array();
-  timetables: Ferrytrips[] = new Array();
+  // timetables: Ferrytrips[] = new Array();  
+  timetables: any = new Array();
+
   location: string;
   service_date: string = new Date().toISOString();
   time_depart: string;
@@ -43,7 +45,7 @@ export class Ferry {
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
-    
+
     this.getHistory();
   }
 
@@ -63,8 +65,10 @@ export class Ferry {
     this.api.get_history(this.location)
       .then((result) => {
         loading.dismiss();
-        this.timetables = <Ferrytrips[]>result;
+        // this.timetables = <Ferrytrips[]>result;
+        this.timetables = result;
         console.log(this.timetables);
+        this.parseTrip();
       }, (err) => {
         loading.dismiss();
         // this.presentConfirm();
@@ -78,7 +82,9 @@ export class Ferry {
       console.log('Async operation has ended');
       this.api.get_ferryroutes(this.location)
         .then((result) => {
-          this.timetables = <Ferrytrips[]>result;
+          // this.timetables = <Ferrytrips[]>result;
+          this.timetables = result;
+          this.parseTrip();
           console.log(this.timetables);
         }, (err) => {
         });
@@ -142,6 +148,17 @@ export class Ferry {
 
   public getDetail(timetable) {
     this.navCtrl.push(Trip, { trip: timetable });
+  }
+
+  private parseTrip() {
+    this.timetables.forEach(element => {
+      let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
+
+      element.FerryRoute.boarding_a = service_date + 'T' + element.FerryRoute.boarding_a + ':00.000+08:00'
+      element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
+      element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
+      element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+    });
   }
 }
 

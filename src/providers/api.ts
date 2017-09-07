@@ -5,7 +5,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class Api {
-  serverPath: string = 'http://ferry.bersepadu.com';
+  serverPath: string = 'https://ferryservice.prasarana.com.my';
+  // serverPath: string = 'http://ferry.bersepadu.com';
 
   constructor(private http: Http, private datePipe: DatePipe) { }
 
@@ -85,5 +86,28 @@ export class Api {
     });
   }
 
+  public populate_trip() {
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/populate_trip.json')
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  public delete_trip() {
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/delete_trip.json')
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
 
 }

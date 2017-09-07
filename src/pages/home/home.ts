@@ -94,13 +94,17 @@ export class HomePage {
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
-
+    if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
+      this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
+      this.checkServiceDate();
+    }
     setTimeout(() => {
       console.log('Async operation has ended');
       this.api.get_ferryroutes(this.location)
         .then((result) => {
           this.timetables = <Ferrytrips[]>result;
           console.log(this.timetables);
+          this.parseTrip();
         }, (err) => {
         });
       refresher.complete();

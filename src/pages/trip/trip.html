@@ -15,8 +15,9 @@
       </h2>
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
+
     <ion-item-divider>
-      Boarding
+      Arrival
     </ion-item-divider>
     <ion-item>
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
@@ -68,6 +69,11 @@
     <ion-item>
       <ion-label>Delay</ion-label>
       <ion-toggle [(ngModel)]="!isOnTime" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Cancel</ion-label>
+      <ion-toggle  color="danger" ></ion-toggle>
     </ion-item>
 
   </ion-list>

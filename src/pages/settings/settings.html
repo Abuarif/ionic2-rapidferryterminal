@@ -22,4 +22,12 @@
       <ion-datetime displayFormat="DDDD, DD MMMM YYYY" pickerFormat="DD-MM-YYYY" [(ngModel)]="service_date" (ionChange)="displayServiceDate()"></ion-datetime>
     </ion-item>
   </ion-list>
+  <ion-row>
+    <ion-col width-50>
+      <button ion-button full (click)="populateConfirm()" color="primary">Populate Trip</button>
+    </ion-col>
+    <ion-col width-50>
+      <button ion-button full (click)="deleteConfirm()" color="danger">Delete Trip</button>
+    </ion-col>
+  </ion-row>
 </ion-content>
