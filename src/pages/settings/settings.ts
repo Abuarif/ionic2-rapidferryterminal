@@ -10,6 +10,13 @@ import { IonicPage, LoadingController, AlertController } from 'ionic-angular';
 })
 export class Settings {
   location: string = 'PRTU';
+  private token: string = '';
+  private email: string = '';
+  private user_id: string = '';
+  private name: string = '';
+  private debug: boolean = false;
+  private activate: boolean = false;
+  
   service_date: string = new Date().toISOString();
   constructor(
     public dataApi: DataApi,

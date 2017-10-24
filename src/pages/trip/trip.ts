@@ -69,7 +69,7 @@ export class Trip {
     this.isOnTime = this.timetable.FerryRoute.isOnTime;
     this.color_isFull = this.timetable.FerryRoute.color_isFull;
     this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
-
+    this.time_depart = this.timetable.FerryRoute.time_depart;
     console.log(this.timetable);
 
     if (this.dataApi.get('location')) {
@@ -92,11 +92,13 @@ export class Trip {
   update_time_depart() {
     let myTime = '';
     if (this.location == 'PRTU') {
-      myTime = this.timetable.FerryRoute.departure_b ;
+      myTime = this.timetable.FerryRoute.departure_b;
     } else if (this.location == 'PSAH') {
-      myTime = this.timetable.FerryRoute.departure_a ;
+      myTime = this.timetable.FerryRoute.departure_a;
     }
-    this.time_depart = myTime;
+    if (this.isOnTime) {
+      this.time_depart = myTime;
+    }
   }
   public updateTrip() {
 

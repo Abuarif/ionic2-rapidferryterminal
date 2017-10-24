@@ -1,3 +1,6 @@
+import { FerryLoadPage } from './../pages/ferry-load/ferry-load';
+import { ProfileUpdatePage } from './../pages/profile-update/profile-update';
+import { LoginPage } from './../pages/login/login';
 import { Trip } from './../pages/trip/trip';
 import { About } from './../pages/about/about';
 import { Settings } from './../pages/settings/settings';
@@ -16,6 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { DataApi } from "../providers/data-api";
 import { DatePipe } from '@angular/common';
+import { AuthGuardProvider } from '../providers/auth-guard/auth-guard';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,9 @@ import { DatePipe } from '@angular/common';
     Ferry,
     Trip,
     Settings,
+    LoginPage,
+    ProfileUpdatePage,
+    FerryLoadPage,
     TabsPage
   ],
   imports: [
@@ -40,6 +47,9 @@ import { DatePipe } from '@angular/common';
     Ferry,
     Trip,
     Settings,
+    LoginPage,
+    ProfileUpdatePage,
+    FerryLoadPage,
     TabsPage
   ],
   providers: [
@@ -48,7 +58,8 @@ import { DatePipe } from '@angular/common';
     Api,
     DataApi,
     DatePipe,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthGuardProvider
   ]
 })
 export class AppModule {}

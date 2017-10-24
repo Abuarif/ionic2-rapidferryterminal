@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class Api {
-  serverPath: string = 'https://ferryservice.prasarana.com.my';
+  serverPath: string = 'https://ferryservice.prasarana.com.my'; 
   // serverPath: string = 'http://ferry.bersepadu.com';
 
   constructor(private http: Http, private datePipe: DatePipe) { }

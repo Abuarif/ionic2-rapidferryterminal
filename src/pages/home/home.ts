@@ -1,3 +1,5 @@
+import { LoginPage } from './../login/login';
+import { AuthGuardProvider } from './../../providers/auth-guard/auth-guard';
 import { DatePipe } from '@angular/common';
 import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
@@ -45,33 +47,13 @@ export class HomePage {
       this.service_date = this.dataApi.get('service_date');
     }
 
+    // if (!AuthGuardProvider.isAuthenticated()) {
+    //   this.navCtrl.push(LoginPage);
+    // }
     this.getFerryTimetables();
   }
 
-  // ngOnInit() {
-  //   if (this.dataApi.get('location')) {
-  //     this.location = this.dataApi.get('location');
-  //   }
-
-  //   if (this.dataApi.get('service_date')) {
-  //     this.service_date = this.dataApi.get('service_date');
-  //   }
-
-  //   this.getFerryTimetables();
-  //   setInterval(
-  //     () => {
-  //       this.getFerryTimetables();
-  //     }, 5000 // refresh to check new data for every 5 seconds.
-  //   )
-  // }
-
   private getFerryTimetables() {
-    // let loading = this._loadingController.create({
-    //   content: "Please wait...",
-    //   duration: 3000
-    // });
-
-    // loading.present();
 
     if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
       this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
@@ -197,6 +179,10 @@ export class HomePage {
       element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
       element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
       element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+
+      if (element.FerryRoute.time_depart != '') {
+        element.FerryRoute.time_depart = new Date(element.FerryRoute.time_depart).toUTCString();
+      }
     });
   }
 }

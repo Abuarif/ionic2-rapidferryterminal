@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.prasarana.ferryterminal598791" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.prasarana.ferryterminal" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Terminal</name>
     <description>A RapidFerry Terminal app.</description>
-    <author email="suhaimi.maidin@prasarana.com.my" href="http://myrapid.com.my/">SDU - ICT Team</author>
+    <author email="prasarana.ict@prasarana.com.my" href="http://myrapid.com.my/">Software Development Unit,ICT/CRAS Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
