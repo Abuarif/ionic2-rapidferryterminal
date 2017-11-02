@@ -29,5 +29,8 @@ export class FerryLoadPage {
     this.load.location = this.navParams.get('location')
   }
 
-  
+  public submit_ferry_load() {
+    // submit_data()
+    this.navCtrl.pop();
+  }
 }

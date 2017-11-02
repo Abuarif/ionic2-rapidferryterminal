@@ -22,7 +22,8 @@ export class Trip {
     level: 0, lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
   }
   service_date: string = new Date().toISOString();
-  isOnTime: boolean = true;
+  // isOnTime: boolean = true;
+  isDelay: boolean = false;
   isFull: boolean = false;
   color_isFull: string;
   color_isOnTime: string;
@@ -31,7 +32,7 @@ export class Trip {
   route_timetable_id: string;
   location_id: string;
   output: Output;
-  submitLabel: string = "Submit";
+  submitLabel: string = "Update Trip";
   public isCancel: boolean = false;
 
   constructor(
@@ -50,7 +51,7 @@ export class Trip {
     this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
     this.location_id = this.timetable.FerryRoute.location_id;
     this.isFull = this.timetable.FerryRoute.isFull;
-    this.isOnTime = this.timetable.FerryRoute.isOnTime;
+    this.isDelay = this.timetable.FerryRoute.isOnTime;
     this.color_isFull = this.timetable.FerryRoute.color_isFull;
     this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
     this.time_depart = this.timetable.FerryRoute.time_depart;
@@ -80,7 +81,7 @@ export class Trip {
     } else if (this.location == 'PSAH') {
       myTime = this.timetable.FerryRoute.departure_a;
     }
-    if (this.isOnTime) {
+    if (!this.isDelay) {
       this.time_depart = myTime;
     }
   }
@@ -97,7 +98,7 @@ export class Trip {
       isFull = 1;
     }
 
-    if (this.isOnTime) {
+    if (!this.isDelay) {
       isOnTime = 1;
     }
 
@@ -134,7 +135,7 @@ export class Trip {
 
   changeOntimeColor() {
 
-    if (this.isOnTime) {
+    if (!this.isDelay) {
       this.color_isOnTime = 'secondary';
       this.update_time_depart();
     } else {
@@ -163,7 +164,7 @@ export class Trip {
 
   public changeDelayStatus() {
     if (this.isCancel) {
-      this.isOnTime = false;
+      this.isDelay = true;
     }
   }
 
