@@ -13,12 +13,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'ferry-load.html',
 })
 export class FerryLoadPage {
-
+  load = {
+    location: 0,
+    lorry: 0,
+    car: 0,
+    motorcycle: 0,
+    bicycle: 0,
+    pedestarian: 0
+  }
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FerryLoadPage');
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter FerryLoadPage');
+    this.load.location = this.navParams.get('location')
   }
 
+  
 }

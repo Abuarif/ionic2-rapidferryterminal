@@ -17,7 +17,7 @@
     </ion-item-divider>
 
     <ion-item-divider>
-      Arrival
+      Departure (Pulau Angsa)
     </ion-item-divider>
     <ion-item>
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
@@ -29,53 +29,42 @@
         {{ timetable.FerryRoute.boarding_b | date:'hh:mm a'}}
       </ion-note>
     </ion-item>
-
     <ion-item>
-      <ion-label> Available</ion-label>
-      <ion-toggle [(ngModel)]="!isFull" color="secondary" (ionChange)="changeFullColor(timetable)"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label> Full</ion-label>
-      <ion-toggle [(ngModel)]="isFull" color="danger" ></ion-toggle>
-    </ion-item>
-    <ion-item-divider>
-      Departure
-    </ion-item-divider>
-    <ion-item>
-      <ion-icon name='timer' item-start color="{{ color_isOnTime }}"></ion-icon>
-      Plan
-      <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.departure_a | date:'hh:mm a'}}
-      </ion-note>
-      <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.departure_b | date:'hh:mm a'}}
-      </ion-note>
-    </ion-item>
-<!-- 
-    <ion-item>
-      <ion-icon name='speedometer' item-start color="{{ color_isOnTime }}"></ion-icon>
-      Actual
-      <ion-note item-end>
-        {{ time_depart | date:'hh:mm a' }}
-      </ion-note>
-    </ion-item> -->
-
-    <ion-item>
-      <ion-label>On Time</ion-label>
-      <ion-toggle [(ngModel)]="isOnTime" color="secondary" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+      <ion-label>Full</ion-label>
+      <ion-toggle [(ngModel)]="isFull" color="danger"></ion-toggle>
     </ion-item>
 
     <ion-item>
       <ion-label>Delay</ion-label>
       <ion-toggle [(ngModel)]="!isOnTime" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
     </ion-item>
-
+    <ion-item *ngIf="!isOnTime">
+      <ion-label>Departure Time</ion-label>
+      <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delaytime"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Actual Ferry</ion-label>
+      <ion-select [(ngModel)]="new_ferry">
+        <ion-option value="1">Pulau Pinang</ion-option>
+        <ion-option value="2">Pulau Undan</ion-option>
+        <ion-option value="3">Pulau Kapas</ion-option>
+        <ion-option value="4">Pulau Angsa</ion-option>
+      </ion-select>
+    </ion-item>
     <ion-item>
       <ion-label>Cancel</ion-label>
-      <ion-toggle  color="danger" ></ion-toggle>
+      <ion-toggle [(ngModel)]="isCancel" color="danger" (ionChange)="changeDelayStatus()"></ion-toggle>
     </ion-item>
-
   </ion-list>
+
+  <ion-segment color="primary">
+    <ion-segment-button value="0" (ionSelect)="addLoading($event)">
+      Ground Load
+    </ion-segment-button>
+    <ion-segment-button value="1" (ionSelect)="addLoading($event)">
+      Level 1 Load
+    </ion-segment-button>
+  </ion-segment>
+
   <button ion-button full (click)="updateTrip()">{{ submitLabel }} </button>
 </ion-content>

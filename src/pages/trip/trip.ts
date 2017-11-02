@@ -1,3 +1,4 @@
+import { FerryLoadPage } from './../ferry-load/ferry-load';
 // import { FerryRoute } from './../../models/ferryroute';
 import { Output } from './../../models/output';
 import { DatePipe } from '@angular/common';
@@ -12,8 +13,14 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
   templateUrl: 'trip.html',
 })
 export class Trip {
+  public new_ferry: string;
+  public delaytime: string;
   timetable: any;
   location: string;
+  loading: string;
+  public load_data = {
+    level: 0, lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
+  }
   service_date: string = new Date().toISOString();
   isOnTime: boolean = true;
   isFull: boolean = false;
@@ -25,6 +32,7 @@ export class Trip {
   location_id: string;
   output: Output;
   submitLabel: string = "Submit";
+  public isCancel: boolean = false;
 
   constructor(
     public _loadingController: LoadingController,
@@ -35,30 +43,6 @@ export class Trip {
     private dataApi: DataApi,
     private datePipe: DatePipe) {
   }
-
-  // ionViewWillEnter() {
-  //   this.timetable = this.NavParams.get('trip');
-  //   this.route_id = this.timetable.FerryRoute.id;
-  //   this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
-  //   this.location_id = this.timetable.FerryRoute.location_id;
-  //   this.isFull = this.timetable.FerryRoute.isFull;
-  //   this.isOnTime = this.timetable.FerryRoute.isOnTime;
-  //   this.color_isFull = this.timetable.FerryRoute.color_isFull;
-  //   this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
-
-  //   console.log(this.timetable);
-
-  //   if (this.dataApi.get('location')) {
-  //     this.location = this.dataApi.get('location');
-  //   }
-
-  //   if (this.dataApi.get('service_date')) {
-  //     this.service_date = this.dataApi.get('service_date');
-  //   }
-  //   this.update_time_depart();
-  //   console.log(this.time_depart);
-  //   console.log(this.timetable);
-  // }
 
   ngOnInit() {
     this.timetable = this.NavParams.get('trip');
@@ -121,12 +105,6 @@ export class Trip {
   }
 
   private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
-    // let loading = this._loadingController.create({
-    //   content: "Please wait...",
-    //   duration: 3000
-    // });
-
-    // loading.present();
 
     this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart)
       .then((result) => {
@@ -181,5 +159,15 @@ export class Trip {
       ]
     });
     alert.present();
+  }
+
+  public changeDelayStatus() {
+    if (this.isCancel) {
+      this.isOnTime = false;
+    }
+  }
+
+  public addLoading(location) {
+    this.navCtrl.push(FerryLoadPage, {'location':location.value})
   }
 }
