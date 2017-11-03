@@ -129,10 +129,11 @@ export class Trip {
     }
     console.log('delayed depart: ' + this.delayed_departure)
 
-    if (this.delayed_departure) {
-      this.setFerryTrip(this.location, this.route_id, this.route_timetable_id, this.service_date, isOnTime, isFull, this.time_depart, this.delayed_departure, isCancelled, this.actual_ferry, this.lorry, this.car, this.motorcycle, this.bicycle, this.pedestarian);
-    } else {
+
+    if (this.isDelay && !this.delayed_departure) {
       alert('Please update the Departure Time!!')
+    } else {
+      this.setFerryTrip(this.location, this.route_id, this.route_timetable_id, this.service_date, isOnTime, isFull, this.time_depart, this.delayed_departure, isCancelled, this.actual_ferry, this.lorry, this.car, this.motorcycle, this.bicycle, this.pedestarian);
     }
   }
 
