@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class Api {
-  serverPath: string = 'https://ferryservice.prasarana.com.my'; 
+  serverPath: string = 'https://ferryservice.prasarana.com.my';
   // serverPath: string = 'http://ferry.bersepadu.com';
 
   constructor(private http: Http, private datePipe: DatePipe) { }
@@ -36,27 +36,44 @@ export class Api {
     });
   }
 
-  public set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
+  public set_ferrytrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
     console.log('set_ferrytrips');
     return new Promise((resolve, reject) => {
 
-      let url = this.serverPath + '/api/set_ferrytrip.json?' +
-        'location=' + location +
-        '&route_id=' + route_id +
-        '&route_timetable_id=' + route_timetable_id +
-        '&service_date=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') +
-        '&isOnTime=' + isOnTime +
-        '&isFull=' + isFull +
-        '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm') +
-        '&delayed_departure=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') + ' ' + delayed_departure + ':00' +
-        '&isCancelled=' + isCancelled +
-        '&actual_ferry=' + actual_ferry +
-        '&lorry=' + lorry +
-        '&car=' + car +
-        '&motorcycle=' + motorcycle +
-        '&bicycle=' + bicycle +
-        '&pedestarian=' + pedestarian +
-        '';
+      let url = '';
+
+      if (delayed_departure) {
+        url = this.serverPath + '/api/set_ferrytrip.json?' +
+          'page=' + page +
+          '&location=' + location +
+          '&route_id=' + route_id +
+          '&route_timetable_id=' + route_timetable_id +
+          '&service_date=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') +
+          '&isOnTime=' + isOnTime +
+          '&isFull=' + isFull +
+          '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm') +
+          '&delayed_departure=' + this.datePipe.transform(delayed_departure, 'yyyy-MM-dd H:mm') + 
+          '&isCancelled=' + isCancelled +
+          '&actual_ferry=' + actual_ferry +
+          '&lorry=' + lorry +
+          '&car=' + car +
+          '&motorcycle=' + motorcycle +
+          '&bicycle=' + bicycle +
+          '&pedestarian=' + pedestarian +
+          '';
+      } else {
+        url = this.serverPath + '/api/set_ferrytrip.json?' +
+          'page=' + page +
+          '&location=' + location +
+          '&route_id=' + route_id +
+          '&route_timetable_id=' + route_timetable_id +
+          '&service_date=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') +
+          '&isOnTime=' + isOnTime +
+          '&isFull=' + isFull +
+          '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm') +
+          '';
+      }
+
       console.log(url);
       this.http.get(url)
         .subscribe(res => {

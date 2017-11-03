@@ -16,8 +16,8 @@
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
 
-    <ion-item-divider>
-      Departure (Pulau Angsa)
+    <ion-item-divider text-center>
+      Departure
     </ion-item-divider>
     <ion-item >
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
@@ -33,13 +33,12 @@
       <ion-label>Full</ion-label>
       <ion-toggle [(ngModel)]="isFull" [disabled]="isDisabled" color="danger"></ion-toggle>
     </ion-item>
-
     <ion-item>
       <ion-label>Delay</ion-label>
       <ion-toggle [(ngModel)]="isDelay" [disabled]="isDisabled" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
     </ion-item>
     <ion-item *ngIf="(isAllow && isDelay)">
-      <ion-label>Departure Time</ion-label>
+      <ion-label>Delayed Departure Time</ion-label>
       <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delayed_departure" [required]="isDelay"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="isAllow">
@@ -55,8 +54,8 @@
   </ion-list>
 
   <ion-list *ngIf="isAllow">
-    <ion-item-divider>
-      Ferry Load Summary
+    <ion-item-divider text-center>
+      Load Summary
     </ion-item-divider>
     <ion-segment color="primary">
       <ion-segment-button value="1" (ionSelect)="addLoading($event)">
@@ -90,5 +89,5 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button block (click)="updateTrip()">{{ submitLabel }} </button>
+  <button ion-button block (click)="updateTrip(requestfrom)">{{ submitLabel }} </button>
 </ion-footer>
