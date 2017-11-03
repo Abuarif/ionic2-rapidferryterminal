@@ -10,29 +10,35 @@ export class DataApi {
     token: '0',
     location: '',
     user_id: '',
-    email:'',
-    name:'',
+    email: '',
+    name: '',
     activate: false
+  };
+  public maindeck = {
+    lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
+  };
+  public upperdeck = {
+    lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
   };
 
   constructor(public http: Http) {
     console.log('Hello Data Provider');
   }
 
-  public store(key:string, value:any) {
-    
+  public store(key: string, value: any) {
+
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, value);
-    } 
+    }
     this.get(key);
   }
 
-  public update(key:string, value:any) {
+  public update(key: string, value: any) {
     localStorage.setItem(key, value);
     this.get(key);
   }
 
-  public clear(key:string) {
+  public clear(key: string) {
     localStorage.removeItem(key);
   }
 
@@ -61,5 +67,5 @@ export class DataApi {
     }
     return temp;
   }
-  
+
 }

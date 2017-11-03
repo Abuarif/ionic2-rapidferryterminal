@@ -168,7 +168,7 @@ export class HomePage {
   }
 
   public getDetail(timetable) {
-    this.navCtrl.push(Trip, { trip: timetable });
+    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom':'active'  });
   }
 
   private parseTrip() {

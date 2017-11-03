@@ -36,13 +36,13 @@
 
     <ion-item>
       <ion-label>Delay</ion-label>
-      <ion-toggle [(ngModel)]="isOnTime" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+      <ion-toggle [(ngModel)]="!isDelay" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
     </ion-item>
-    <ion-item *ngIf="!isOnTime">
+    <ion-item *ngIf="(isAllow && !isDelay)">
       <ion-label>Departure Time</ion-label>
       <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delaytime"></ion-datetime>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="isAllow">
       <ion-label>Actual Ferry</ion-label>
       <ion-select [(ngModel)]="new_ferry">
         <ion-option value="1">Pulau Pinang</ion-option>
@@ -51,20 +51,45 @@
         <ion-option value="4">Pulau Angsa</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="isAllow">
       <ion-label>Cancel</ion-label>
       <ion-toggle [(ngModel)]="isCancel" color="danger" (ionChange)="changeDelayStatus()"></ion-toggle>
     </ion-item>
   </ion-list>
 
-  <ion-segment color="primary">
-    <ion-segment-button value="0" (ionSelect)="addLoading($event)">
-      Ground Load
-    </ion-segment-button>
-    <ion-segment-button value="1" (ionSelect)="addLoading($event)">
-      Level 1 Load
-    </ion-segment-button>
-  </ion-segment>
+  <ion-list *ngIf="isAllow">
+    <ion-item-divider>
+      Ferry Load Summary
+    </ion-item-divider>
+    <ion-segment color="primary">
+      <ion-segment-button value="1" (ionSelect)="addLoading($event)">
+        Main Deck
+      </ion-segment-button>
+      <ion-segment-button value="2" (ionSelect)="addLoading($event)">
+        Upper Deck
+      </ion-segment-button>
+    </ion-segment>
+    <ion-item>
+      <ion-note>Lorry</ion-note>
+      <ion-note item-end>{{ lorry }} </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-note>Car</ion-note>
+      <ion-note item-end>{{ car }} </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-note>Motorcycle</ion-note>
+      <ion-note item-end>{{ motorcycle }} </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-note>Bicyle</ion-note>
+      <ion-note item-end>{{ bicycle }} </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-note>Pedestarian</ion-note>
+      <ion-note item-end>{{ pedestarian }} </ion-note>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
 <ion-footer>

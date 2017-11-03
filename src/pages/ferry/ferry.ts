@@ -147,7 +147,7 @@ export class Ferry {
   }
 
   public getDetail(timetable) {
-    this.navCtrl.push(Trip, { trip: timetable });
+    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom':'history' });
   }
 
   private parseTrip() {

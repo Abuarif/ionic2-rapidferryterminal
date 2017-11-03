@@ -18,9 +18,7 @@ export class Trip {
   timetable: any;
   location: string;
   loading: string;
-  public load_data = {
-    level: 0, lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
-  }
+
   service_date: string = new Date().toISOString();
   // isOnTime: boolean = true;
   isDelay: boolean = false;
@@ -34,6 +32,13 @@ export class Trip {
   output: Output;
   submitLabel: string = "Update Trip";
   public isCancel: boolean = false;
+  public lorry: number = 0;
+  public car: number = 0;
+  public motorcycle: number = 0;
+  public bicycle: number = 0;
+  public pedestarian: number = 0;
+  public requestfrom: string;
+  public isAllow: boolean = false;
 
   constructor(
     public _loadingController: LoadingController,
@@ -46,6 +51,7 @@ export class Trip {
   }
 
   ngOnInit() {
+    this.requestfrom = this.NavParams.get('requestfrom');
     this.timetable = this.NavParams.get('trip');
     this.route_id = this.timetable.FerryRoute.id;
     this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
@@ -56,6 +62,7 @@ export class Trip {
     this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
     this.time_depart = this.timetable.FerryRoute.time_depart;
     console.log(this.timetable);
+    this.reset_data();
 
     if (this.dataApi.get('location')) {
       this.location = this.dataApi.get('location');
@@ -72,6 +79,19 @@ export class Trip {
         this.update_time_depart();
       }, 5000 // refresh to check new data for every 5 seconds.
     )
+  }
+
+  ionViewDidEnter() {
+    this.lorry = +this.dataApi.maindeck.lorry + +this.dataApi.upperdeck.lorry;
+    this.car = +this.dataApi.maindeck.car + +this.dataApi.upperdeck.car;
+    this.motorcycle = +this.dataApi.maindeck.motorcycle + +this.dataApi.upperdeck.motorcycle;
+    this.bicycle = +this.dataApi.maindeck.bicycle + +this.dataApi.upperdeck.bicycle;
+    this.pedestarian = +this.dataApi.maindeck.pedestarian + +this.dataApi.upperdeck.pedestarian;
+
+    if (this.requestfrom == 'history') {
+      this.isAllow = true;
+    }
+   
   }
 
   update_time_depart() {
@@ -169,6 +189,22 @@ export class Trip {
   }
 
   public addLoading(location) {
-    this.navCtrl.push(FerryLoadPage, {'location':location.value})
+    this.navCtrl.push(FerryLoadPage, { 'location': location.value })
+  }
+
+  reset_data() {
+    this.dataApi.maindeck.lorry = 0;
+    this.dataApi.maindeck.car = 0;
+    this.dataApi.maindeck.motorcycle = 0;
+    this.dataApi.maindeck.bicycle = 0;
+    this.dataApi.maindeck.pedestarian = 0;
+
+
+    this.dataApi.upperdeck.lorry = 0;
+    this.dataApi.upperdeck.car = 0;
+    this.dataApi.upperdeck.motorcycle = 0;
+    this.dataApi.upperdeck.bicycle = 0;
+    this.dataApi.upperdeck.pedestarian = 0;
+
   }
 }
