@@ -26,6 +26,7 @@ export class Trip {
   color_isFull: string;
   color_isOnTime: string;
   time_depart: string;
+  public delayed_departure: string;
   route_id: string;
   route_timetable_id: string;
   location_id: string;
@@ -39,6 +40,9 @@ export class Trip {
   public pedestarian: number = 0;
   public requestfrom: string;
   public isAllow: boolean = false;
+  public isDisabled: boolean = false;
+  public actual_ferry: string;
+  public ferries: any;
 
   constructor(
     public _loadingController: LoadingController,
@@ -57,7 +61,7 @@ export class Trip {
     this.route_timetable_id = this.timetable.FerryRoute.route_timetable_id;
     this.location_id = this.timetable.FerryRoute.location_id;
     this.isFull = this.timetable.FerryRoute.isFull;
-    this.isDelay = this.timetable.FerryRoute.isOnTime;
+    this.isDelay = !this.timetable.FerryRoute.isOnTime;
     this.color_isFull = this.timetable.FerryRoute.color_isFull;
     this.color_isOnTime = this.timetable.FerryRoute.color_isOnTime;
     this.time_depart = this.timetable.FerryRoute.time_depart;
@@ -82,6 +86,7 @@ export class Trip {
   }
 
   ionViewDidEnter() {
+    this.getFerry();
     this.lorry = +this.dataApi.maindeck.lorry + +this.dataApi.upperdeck.lorry;
     this.car = +this.dataApi.maindeck.car + +this.dataApi.upperdeck.car;
     this.motorcycle = +this.dataApi.maindeck.motorcycle + +this.dataApi.upperdeck.motorcycle;
@@ -90,8 +95,12 @@ export class Trip {
 
     if (this.requestfrom == 'history') {
       this.isAllow = true;
+      this.isDisabled = true;
+    } else {
+      this.isAllow = false;
+      this.isDisabled = false;
     }
-   
+
   }
 
   update_time_depart() {
@@ -106,28 +115,30 @@ export class Trip {
     }
   }
   public updateTrip() {
-
-    let location = this.location;
-    let route_id = this.route_id;
-    let route_timetable_id = this.route_timetable_id;
-    let service_date = this.service_date;
     let isOnTime = 0;
     let isFull = 0;
-    let time_depart = this.time_depart;
+    let isCancelled = 0;
     if (this.isFull) {
       isFull = 1;
     }
-
     if (!this.isDelay) {
       isOnTime = 1;
     }
+    if (this.isCancel) {
+      isCancelled = 1;
+    }
+    console.log('delayed depart: ' + this.delayed_departure)
 
-    this.setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart);
+    if (this.delayed_departure) {
+      this.setFerryTrip(this.location, this.route_id, this.route_timetable_id, this.service_date, isOnTime, isFull, this.time_depart, this.delayed_departure, isCancelled, this.actual_ferry, this.lorry, this.car, this.motorcycle, this.bicycle, this.pedestarian);
+    } else {
+      alert('Please update the Departure Time!!')
+    }
   }
 
-  private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
+  private setFerryTrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
 
-    this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart)
+    this.api.set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian)
       .then((result) => {
         this.output = <Output>result;
         // loading.dismiss();
@@ -206,5 +217,15 @@ export class Trip {
     this.dataApi.upperdeck.bicycle = 0;
     this.dataApi.upperdeck.pedestarian = 0;
 
+  }
+
+  private getFerry() {
+
+    this.api.get_ferry()
+      .then((result) => {
+        this.ferries = result;
+        console.log(this.ferries);
+      }, (err) => {
+      });
   }
 }

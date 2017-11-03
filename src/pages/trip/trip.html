@@ -19,7 +19,7 @@
     <ion-item-divider>
       Departure (Pulau Angsa)
     </ion-item-divider>
-    <ion-item>
+    <ion-item >
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
       Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
@@ -31,24 +31,21 @@
     </ion-item>
     <ion-item>
       <ion-label>Full</ion-label>
-      <ion-toggle [(ngModel)]="isFull" color="danger"></ion-toggle>
+      <ion-toggle [(ngModel)]="isFull" [disabled]="isDisabled" color="danger"></ion-toggle>
     </ion-item>
 
     <ion-item>
       <ion-label>Delay</ion-label>
-      <ion-toggle [(ngModel)]="!isDelay" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
+      <ion-toggle [(ngModel)]="isDelay" [disabled]="isDisabled" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
     </ion-item>
-    <ion-item *ngIf="(isAllow && !isDelay)">
+    <ion-item *ngIf="(isAllow && isDelay)">
       <ion-label>Departure Time</ion-label>
-      <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delaytime"></ion-datetime>
+      <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delayed_departure" [required]="isDelay"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="isAllow">
       <ion-label>Actual Ferry</ion-label>
-      <ion-select [(ngModel)]="new_ferry">
-        <ion-option value="1">Pulau Pinang</ion-option>
-        <ion-option value="2">Pulau Undan</ion-option>
-        <ion-option value="3">Pulau Kapas</ion-option>
-        <ion-option value="4">Pulau Angsa</ion-option>
+      <ion-select [(ngModel)]="actual_ferry">
+        <ion-option *ngFor="let ferry of ferries" [value]="ferry.Ferry.name"> {{ ferry.Ferry.name }}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="isAllow">
@@ -93,5 +90,5 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button full block (click)="updateTrip()">{{ submitLabel }} </button>
+  <button ion-button block (click)="updateTrip()">{{ submitLabel }} </button>
 </ion-footer>

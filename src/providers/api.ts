@@ -36,7 +36,7 @@ export class Api {
     });
   }
 
-  public set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart) {
+  public set_ferrytrip(location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
     console.log('set_ferrytrips');
     return new Promise((resolve, reject) => {
 
@@ -47,7 +47,16 @@ export class Api {
         '&service_date=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') +
         '&isOnTime=' + isOnTime +
         '&isFull=' + isFull +
-        '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm');
+        '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm') +
+        '&delayed_departure=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') + ' ' + delayed_departure + ':00' +
+        '&isCancelled=' + isCancelled +
+        '&actual_ferry=' + actual_ferry +
+        '&lorry=' + lorry +
+        '&car=' + car +
+        '&motorcycle=' + motorcycle +
+        '&bicycle=' + bicycle +
+        '&pedestarian=' + pedestarian +
+        '';
       console.log(url);
       this.http.get(url)
         .subscribe(res => {
@@ -90,6 +99,18 @@ export class Api {
     return new Promise((resolve, reject) => {
 
       this.http.get(this.serverPath + '/api/populate_trip.json')
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  public get_ferry() {
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/get_ferry.json')
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {
