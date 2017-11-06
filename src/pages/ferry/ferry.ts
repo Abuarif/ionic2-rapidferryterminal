@@ -147,28 +147,29 @@ export class Ferry {
   }
 
   public getDetail(timetable) {
-    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom':'history' });
+    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom': 'history' });
   }
 
   private parseTrip() {
     this.timetables.forEach(element => {
       let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
-      if (element.FerryRoute.boarding_a == 'Tamat'|| element.FerryRoute.boarding_a == '') {
+      if (element.FerryRoute.boarding_a == 'Tamat' || element.FerryRoute.boarding_a == '') {
         element.FerryRoute.boarding_a = '23:59'
       }
-      if (element.FerryRoute.boarding_b == 'Tamat'|| element.FerryRoute.boarding_b == '') {
+      if (element.FerryRoute.boarding_b == 'Tamat' || element.FerryRoute.boarding_b == '') {
         element.FerryRoute.boarding_b = '23:59'
       }
-      if (element.FerryRoute.departure_a == 'Tamat'|| element.FerryRoute.departure_a == '') {
+      if (element.FerryRoute.departure_a == 'Tamat' || element.FerryRoute.departure_a == '') {
         element.FerryRoute.departure_a = '23:59'
       }
-      if (element.FerryRoute.departure_b == 'Tamat'|| element.FerryRoute.departure_b == '') {
+      if (element.FerryRoute.departure_b == 'Tamat' || element.FerryRoute.departure_b == '') {
         element.FerryRoute.departure_b = '23:59'
       }
       element.FerryRoute.boarding_a = service_date + 'T' + element.FerryRoute.boarding_a + ':00.000+08:00'
       element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
       element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
       element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+      element.FerryRoute.delayed_departure = service_date + 'T' + new Date(element.FerryRoute.delayed_departure).toLocaleTimeString() + '.000+08:00'
     });
   }
 }

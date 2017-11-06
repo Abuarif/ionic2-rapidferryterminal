@@ -20,6 +20,8 @@ export class RouteTimetable {
     color_isOntime: string = 'dark';
     color_isFull: string = 'dark';
     time_depart: string;
+    delayed_departure: string;
+    isExtra: boolean;
 }
 
 export class RouteTrip {
@@ -35,4 +37,11 @@ export class RouteTrip {
     time_depart: string;
     update_by: string;
     status: boolean;
+    isCancelled: boolean;
+    lorry: number;
+    car: number;
+    motorcycle: number;
+    bicycle: number;
+    pedestarian: number;
+    actual_ferry: string;
 }

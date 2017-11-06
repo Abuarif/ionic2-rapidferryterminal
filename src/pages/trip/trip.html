@@ -19,7 +19,7 @@
     <ion-item-divider text-center>
       Departure
     </ion-item-divider>
-    <ion-item >
+    <ion-item>
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
       Plan
       <ion-note item-end *ngIf="location == 'PSAH'">
@@ -37,19 +37,19 @@
       <ion-label>Delay</ion-label>
       <ion-toggle [(ngModel)]="isDelay" [disabled]="isDisabled" color="danger" (ionChange)="changeOntimeColor(timetable)"></ion-toggle>
     </ion-item>
-    <ion-item *ngIf="(isAllow && isDelay)">
+    <ion-item>
+      <ion-label>Cancel</ion-label>
+      <ion-toggle [(ngModel)]="isCancel" color="danger" (ionChange)="changeDelayStatus()"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="(isDelay && !isCancel)">
       <ion-label>Delayed Departure Time</ion-label>
       <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delayed_departure" [required]="isDelay"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="isAllow">
       <ion-label>Actual Ferry</ion-label>
       <ion-select [(ngModel)]="actual_ferry">
-        <ion-option *ngFor="let ferry of ferries" [value]="ferry.Ferry.name"> {{ ferry.Ferry.name }}</ion-option>
+        <ion-option *ngFor="let ferry of ferries" [value]="ferry.Ferry.name" [selected]="actual_ferry == ferry.Ferry.name"> {{ ferry.Ferry.name }}</ion-option>
       </ion-select>
-    </ion-item>
-    <ion-item *ngIf="isAllow">
-      <ion-label>Cancel</ion-label>
-      <ion-toggle [(ngModel)]="isCancel" color="danger" (ionChange)="changeDelayStatus()"></ion-toggle>
     </ion-item>
   </ion-list>
 
@@ -78,7 +78,7 @@
       <ion-note item-end>{{ motorcycle }} </ion-note>
     </ion-item>
     <ion-item>
-      <ion-note>Bicyle</ion-note>
+      <ion-note>Bicycle</ion-note>
       <ion-note item-end>{{ bicycle }} </ion-note>
     </ion-item>
     <ion-item>
@@ -88,6 +88,6 @@
   </ion-list>
 </ion-content>
 
-<ion-footer>
+<ion-footer padding>
   <button ion-button block (click)="updateTrip(requestfrom)">{{ submitLabel }} </button>
 </ion-footer>
