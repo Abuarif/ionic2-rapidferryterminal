@@ -10,13 +10,13 @@ import { IonicPage, LoadingController, AlertController } from 'ionic-angular';
 })
 export class Settings {
   location: string = 'PRTU';
-  private token: string = '';
-  private email: string = '';
-  private user_id: string = '';
-  private name: string = '';
-  private debug: boolean = false;
-  private activate: boolean = false;
-  
+  public ferry_ops: any;
+  public ferries: any;
+  public users: any;
+  public ops = { a: '', b: '', c: '', d: '', e: '', f: '' };
+
+  current_date: string = new Date().toISOString();
+
   service_date: string = new Date().toISOString();
   constructor(
     public dataApi: DataApi,
@@ -25,18 +25,24 @@ export class Settings {
     public _loadingController: LoadingController) {
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     if (this.dataApi.get('location')) {
       this.location = this.dataApi.get('location');
     }
     if (this.dataApi.get('service_date')) {
       this.service_date = this.dataApi.get('service_date');
     }
+    if (this.dataApi.get('ferry_ops')) {
+      this.ferry_ops = this.dataApi.getFerryOps();
+    }
+    this.getFerry();
   }
 
   ionViewWillLeave() {
     this.dataApi.update('location', this.location);
     this.dataApi.update('service_date', this.service_date);
+    this.dataApi.setFerryOps(this.ferry_ops);
+
   }
 
   displayServiceDate() {
@@ -55,6 +61,25 @@ export class Settings {
       .then((data) => {
         loading.dismiss();
         alert('Dismiss');
+      }, (err) => {
+        loading.dismiss();
+      });
+  }
+
+  public get_ferry_ops() {
+    let loading = this._loadingController.create({
+      content: "Please wait...",
+      duration: 2000
+    });
+
+    loading.present();
+
+    this.api.get_ferry_ops(this.service_date)
+      .then((data) => {
+        loading.dismiss();
+        this.ferry_ops = data;
+        this.parseFerryOps();
+        console.log(this.ferry_ops)
       }, (err) => {
         loading.dismiss();
       });
@@ -120,5 +145,61 @@ export class Settings {
       }, (err) => {
         loading.dismiss();
       });
+  }
+
+  parseFerryOps() {
+    this.ferry_ops.forEach(element => {
+      if (element.FerryOpView.order == '0') {
+        element.FerryOpView.order = 'A'
+      } else if (element.FerryOpView.order == '1') {
+        element.FerryOpView.order = 'B'
+      } else if (element.FerryOpView.order == '2') {
+        element.FerryOpView.order = 'C'
+      } else if (element.FerryOpView.order == '3') {
+        element.FerryOpView.order = 'D'
+      } else if (element.FerryOpView.order == '4') {
+        element.FerryOpView.order = 'E'
+      } else if (element.FerryOpView.order == '5') {
+        element.FerryOpView.order = 'F'
+      }
+    });
+  }
+
+  public refresh_ferryops() {
+    this.get_ferry_ops();
+    this.dataApi.setFerryOps(this.ferry_ops);
+  }
+
+  public save_ferryops() {
+    let loading = this._loadingController.create({
+      content: "Please wait...",
+      duration: 3000
+    });
+    loading.present();
+    this.api.set_ferry_ops(this.service_date, this.ops.a, this.ops.b, this.ops.c, this.ops.d, this.ops.e, this.ops.f)
+      .then((data) => {
+        loading.dismiss();
+      }, (err) => {
+        loading.dismiss();
+      });
+  }
+
+  private getFerry() {
+    this.api.get_ferry()
+      .then((result) => {
+        this.ferries = result;
+        console.log(this.ferries);
+      }, (err) => {
+      });
+  }
+
+  public allow_set_ferryops() {
+    let status: boolean = false;
+    let today = new Date(this.current_date);
+    let systDate = new Date(this.service_date);
+    if (systDate.getDate() > today.getDate()) {
+      status = true;
+    }
+    return status;
   }
 }

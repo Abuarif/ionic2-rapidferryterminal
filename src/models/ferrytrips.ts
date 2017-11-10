@@ -45,3 +45,11 @@ export class RouteTrip {
     pedestarian: number;
     actual_ferry: string;
 }
+
+export class FerryOps {
+    id: string;
+    service_date: string;
+    status: boolean;
+    order: string;
+    name: string;
+}

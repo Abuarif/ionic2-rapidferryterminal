@@ -1,3 +1,4 @@
+import { FerryOps } from './../models/ferrytrips';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -20,9 +21,19 @@ export class DataApi {
   public upperdeck = {
     lorry: 0, car: 0, motorcycle: 0, bicycle: 0, pedestarian: 0
   };
-
+  public ferry_ops: FerryOps[] = new Array();
+  
   constructor(public http: Http) {
     console.log('Hello Data Provider');
+  }
+
+  setFerryOps(ferry_ops: FerryOps) {
+    localStorage.setItem('ferry_ops', JSON.stringify(this.ferry_ops));
+  }
+
+  getFerryOps() {
+    this.ferry_ops = JSON.parse(localStorage.getItem('ferry_ops')) as FerryOps[];
+    return this.ferry_ops;
   }
 
   public store(key: string, value: any) {
