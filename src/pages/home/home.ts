@@ -1,5 +1,3 @@
-import { LoginPage } from './../login/login';
-import { AuthGuardProvider } from './../../providers/auth-guard/auth-guard';
 import { DatePipe } from '@angular/common';
 import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
