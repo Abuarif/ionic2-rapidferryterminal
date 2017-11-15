@@ -42,7 +42,7 @@
     </ion-item> -->
     <ion-item *ngFor="let ferry_op of ferry_ops">
       <ion-label>{{ ferry_op.FerryOrder.name }} </ion-label>
-      <ion-select [(ngModel)]="ferry_op.FerryOperation.ferry_id">
+      <ion-select [(ngModel)]="ferry_op.FerryOperation.ferry_id" [disabled]="true">
         <ion-option *ngFor="let ferry of ferries" value="{{ ferry.Ferry.id }}"> {{ ferry.Ferry.name }} </ion-option>
       </ion-select>
     </ion-item>

@@ -183,14 +183,15 @@ export class ApiProvider {
 
   public add_ferry_op(data) {
     let headers = new Headers({
-      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
     }); // set json as Content-Type http header
     let options = new RequestOptions({ headers: headers }); // encapsulate header into http request options
     let body = JSON.stringify(data); // convert user Account object into JSON format
-    console.log(body)
+    // console.log(body)
     return new Promise((resolve, reject) => {
+      // this.http.post(this.serverPath + '/api/set_ferry_ops.json', body)
       this.http.post(this.serverPath + '/api/set_ferry_ops.json', body, options)
         .subscribe(res => {
           resolve(res.json());
