@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: 'ferry-assignment.html',
 })
 export class FerryAssignmentPage {
-  public ferry_ops: any;
+  public ferry_orders: any;
   public ferries: any;
   public service_date: string;
   public ferry_operation: FerryOperation = new FerryOperation();
@@ -29,11 +29,27 @@ export class FerryAssignmentPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FerryAssignmentPage');
-    this.ferry_ops = this.navParams.get('ferry_ops');
-    this.ferries = this.navParams.get('ferries');
     this.service_date = this.navParams.get('service_date');
 
-    console.log(this.ferry_ops)
+    this.getFerry();
+    this.getFerryOrder();
+  }
+
+  private getFerry() {
+    this.api.get_ferry()
+      .then((result) => {
+        this.ferries = result;
+      }, (err) => {
+      });
+  }
+
+
+  private getFerryOrder() {
+    this.api.get_ferry_order()
+      .then((result) => {
+        this.ferry_orders = result;
+      }, (err) => {
+      });
   }
 
   public add_ferryops() {

@@ -136,6 +136,18 @@ export class ApiProvider {
     });
   }
 
+  public get_ferry_order() {
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/get_ferry_order.json')
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
   public get_ferry_ops(service_date) {
     return new Promise((resolve, reject) => {
 
