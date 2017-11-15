@@ -20,6 +20,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DataApi } from "../providers/data-api";
 import { DatePipe } from '@angular/common';
 import { AuthGuardProvider } from '../providers/auth-guard/auth-guard';
+import { ApiProvider } from '../providers/api/api';
+import { DataApiProvider } from '../providers/data-api/data-api';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ import { AuthGuardProvider } from '../providers/auth-guard/auth-guard';
     DataApi,
     DatePipe,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthGuardProvider
+    AuthGuardProvider,
+    ApiProvider,
+    DataApiProvider,
+    AuthServiceProvider
   ]
 })
 export class AppModule {}

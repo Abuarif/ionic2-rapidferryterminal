@@ -146,7 +146,7 @@ export class Trip {
     } else {
       this.delayed_departure = this.departure_time;
     }
-    
+
   }
 
   update_time_depart() {
@@ -196,14 +196,10 @@ export class Trip {
     this.api.set_ferrytrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian)
       .then((result) => {
         this.output = <Output>result;
-        // loading.dismiss();
-        console.log(result);
         if (this.output.result == 'ok') {
-          this.acknowledge(this.output.message);
           this.submitLabel = 'Resubmit';
-        } else {
-          this.acknowledge(this.output.message);
         }
+        this.acknowledge(this.output.message);
       }, (err) => {
         // loading.dismiss();
         console.log(err);

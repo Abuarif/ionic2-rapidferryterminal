@@ -1,3 +1,29 @@
 page-login {
-
+    .item {
+        border:1px solid #EBE5E5;
+        border-radius:5px;
+        background-color:#EBE5E5;
+        height:70px;
+      }
+    
+      .padding-item {
+        padding-top:15px;
+      }
+    
+      .padding-button {
+        padding-top:30px;
+      }
+    
+      .footer {
+        color:#7A7E7E;
+        padding-bottom:5px;
+      }
+    
+      .ios-icon {
+        font-size: 30px;
+      }
+    
+      .ion-icon-color {
+        color:#ACA9A9;
+      }
 }

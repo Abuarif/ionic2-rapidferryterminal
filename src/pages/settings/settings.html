@@ -2,12 +2,21 @@
 
   <ion-navbar color="primary">
     <ion-title>Settings</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-left (click)="AdminSheet()">
+        <ion-icon name="boat"></ion-icon>
+      </button>
+      <button ion-button icon-left (click)="SignOutSheet()">
+        <ion-icon name="exit"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
   <ion-list inset>
     <ion-item>
       <ion-label>Pangkalan</ion-label>
@@ -23,70 +32,56 @@
     </ion-item>
   </ion-list>
 
-  <div>
-    <ion-segment [(ngModel)]="users">
-      <ion-segment-button value="DO">
-        Ferry Assignment
-      </ion-segment-button>
-      <ion-segment-button value="admin">
-        Admin Only
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-  <div [ngSwitch]="users">
-    <ion-list *ngSwitchCase="'DO'">
-      <button ion-button outline block (click)="refresh_ferryops()">Reload</button>
-      <div *ngIf="!allow_set_ferryops()">
-        <ion-item *ngFor="let op of ferry_ops">
-          <ion-note item-start> {{ op.FerryOpView.order }} </ion-note>
-          <ion-note item-end>
-            {{ op.FerryOpView.name }}
-          </ion-note>
-        </ion-item>
-      </div>
-      <div *ngIf="allow_set_ferryops()">
-        <ion-item>
-          <ion-label>Ferry A</ion-label>
-          <ion-select [(ngModel)]="ops.a">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Ferry B</ion-label>
-          <ion-select [(ngModel)]="ops.b" multiple="false">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Ferry C</ion-label>
-          <ion-select [(ngModel)]="ops.c" multiple="false">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Ferry D</ion-label>
-          <ion-select [(ngModel)]="ops.d" multiple="false">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Ferry E</ion-label>
-          <ion-select [(ngModel)]="ops.e" multiple="false">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Ferry F</ion-label>
-          <ion-select [(ngModel)]="ops.f" multiple="false">
-            <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
-          </ion-select>
-        </ion-item>
-        <button ion-button outline block color="secondary" (click)="save_ferryops()">Save</button>
-      </div>
-    </ion-list>
-    <ion-list *ngSwitchCase="'admin'">
-      <button ion-button block outline (click)="populateConfirm()" color="primary">Populate Trips</button>
-      <button ion-button block outline (click)="deleteConfirm()" color="danger">Delete Trips</button>
-    </ion-list>
-  </div>
+  <ion-list>
+    <button ion-button outline block (click)="refresh_ferryops()">Reload</button>
+    <!-- <div *ngIf="!allow_set_ferryops()"> -->
+    <div>
+      <ion-item *ngFor="let op of ferry_ops">
+        <ion-note item-start> {{ op.FerryOpView.order }} </ion-note>
+        <ion-note item-end>
+          {{ op.FerryOpView.name }}
+        </ion-note>
+      </ion-item>
+    </div>
+    <div>
+      <!-- <div *ngIf="allow_set_ferryops()"> -->
+      <ion-item>
+        <ion-label>Ferry A</ion-label>
+        <ion-select [(ngModel)]="ops.a">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Ferry B</ion-label>
+        <ion-select [(ngModel)]="ops.b" multiple="false">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Ferry C</ion-label>
+        <ion-select [(ngModel)]="ops.c" multiple="false">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Ferry D</ion-label>
+        <ion-select [(ngModel)]="ops.d" multiple="false">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Ferry E</ion-label>
+        <ion-select [(ngModel)]="ops.e" multiple="false">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Ferry F</ion-label>
+        <ion-select [(ngModel)]="ops.f" multiple="false">
+          <ion-option *ngFor="let ferry of ferries" value="{{ferry.Ferry.name}}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <button ion-button outline block color="secondary" (click)="save_ferryops()">Save</button>
+    </div>
+  </ion-list>
 </ion-content>
