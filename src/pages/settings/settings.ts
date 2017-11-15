@@ -6,6 +6,7 @@ import { IonicPage, LoadingController, AlertController, ActionSheetController } 
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { LoginPage } from '../login/login';
+import { FerryAssignmentPage } from '../ferry-assignment/ferry-assignment';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,6 @@ export class Settings {
   public ferry_ops: any;
   public ferries: any;
   public users: any;
-  public ops = { a: '', b: '', c: '', d: '', e: '', f: '' };
   output: Output;
   current_date: string = new Date().toISOString();
   service_date: string = new Date().toISOString();
@@ -48,6 +48,7 @@ export class Settings {
       this.ferry_ops = this.dataApi.getFerryOps();
     }
     this.getFerry();
+    this.get_ferry_ops();
   }
 
   ionViewWillLeave() {
@@ -90,7 +91,7 @@ export class Settings {
       .then((data) => {
         loading.dismiss();
         this.ferry_ops = data;
-        this.parseFerryOps();
+        // this.parseFerryOps();
         console.log(this.ferry_ops)
       }, (err) => {
         loading.dismiss();
@@ -159,30 +160,6 @@ export class Settings {
       });
   }
 
-  parseFerryOps() {
-    this.ferry_ops.forEach(element => {
-      if (element.FerryOpView.order == '0') {
-        element.FerryOpView.order = 'A'
-        this.ops.a = element.FerryOpView.name
-      } else if (element.FerryOpView.order == '1') {
-        element.FerryOpView.order = 'B'
-        this.ops.b = element.FerryOpView.name
-      } else if (element.FerryOpView.order == '2') {
-        element.FerryOpView.order = 'C'
-        this.ops.c = element.FerryOpView.name
-      } else if (element.FerryOpView.order == '3') {
-        element.FerryOpView.order = 'D'
-        this.ops.d = element.FerryOpView.name
-      } else if (element.FerryOpView.order == '4') {
-        element.FerryOpView.order = 'E'
-        this.ops.e = element.FerryOpView.name
-      } else if (element.FerryOpView.order == '5') {
-        element.FerryOpView.order = 'F'
-        this.ops.f = element.FerryOpView.name
-      }
-    });
-  }
-
   public refresh_ferryops() {
     this.get_ferry_ops();
     this.dataApi.setFerryOps(this.ferry_ops);
@@ -194,7 +171,7 @@ export class Settings {
       duration: 3000
     });
     loading.present();
-    this.api.set_ferry_ops(this.service_date, this.ops.a, this.ops.b, this.ops.c, this.ops.d, this.ops.e, this.ops.f)
+    this.api.set_ferry_ops(this.service_date, '', '', '', '', '', '')
       .then((data) => {
         this.output = <Output>data;
         loading.dismiss();
@@ -253,12 +230,14 @@ export class Settings {
           role: 'populate',
           handler: () => {
             console.log('Populate clicked');
+            this.populateConfirm();
           }
         }, {
           text: 'Delete Data',
           role: 'delete',
           handler: () => {
             console.log('Delete clicked');
+            this.deleteConfirm();
           }
         }, {
           text: 'Cancel',
@@ -294,5 +273,15 @@ export class Settings {
       ]
     });
     actionSheet.present();
+  }
+
+  public add_ferry_op() {
+    this.navCtrl.push(FerryAssignmentPage,
+      {
+        'ferry_ops': this.ferry_ops,
+        'ferries': this.ferries,
+        'service_date': this.service_date
+      }
+    );
   }
 }

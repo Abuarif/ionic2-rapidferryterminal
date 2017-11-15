@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Ferry Assignment</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Label </ion-label>
+      <ion-select [(ngModel)]="ferry_operation.ferry_order_id">
+        <ion-option *ngFor="let ferry_op of ferry_ops" value="{{ ferry_op.FerryOrder.id }}"> {{ ferry_op.FerryOrder.name }} </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Ferry Name </ion-label>
+      <ion-select [(ngModel)]="ferry_operation.ferry_id">
+        <ion-option *ngFor="let ferry of ferries" value="{{ ferry.Ferry.id }}"> {{ ferry.Ferry.name }} </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <button ion-button outline block color="secondary" (click)="add_ferryops()">Add</button>
+</ion-content>
