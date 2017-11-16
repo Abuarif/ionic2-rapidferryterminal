@@ -1,4 +1,3 @@
-import { FerryOperation } from './../../models/ferryoperation';
 import { Output } from './../../models/output';
 import { DataApi } from './../../providers/data-api';
 import { Component } from '@angular/core';
