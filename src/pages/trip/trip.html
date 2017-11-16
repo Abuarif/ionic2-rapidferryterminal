@@ -17,7 +17,7 @@
     </ion-item-divider>
 
     <ion-item-divider text-center>
-      Departure
+      <h2>Departure</h2>
     </ion-item-divider>
     <ion-item>
       <ion-icon name='boat' item-start color="{{ color_isFull }}"></ion-icon>
@@ -55,7 +55,7 @@
 
   <ion-list *ngIf="isAllow">
     <ion-item-divider text-center>
-      Load Summary
+      <h2>Load Summary</h2>
     </ion-item-divider>
     <ion-segment color="primary">
       <ion-segment-button value="1" (ionSelect)="addLoading($event)">

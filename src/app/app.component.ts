@@ -1,4 +1,3 @@
-import { LoginPage } from './../pages/login/login';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
@@ -28,12 +27,6 @@ export class MyApp {
       // if (this.connectivityService.isOnline()) {
         if (!this.platform.is('cordova')) {
           this.authService.native = true;
-        }
-
-        if (this.authService.authenticated()) {
-          this.rootPage = TabsPage;
-        } else {
-          this.rootPage = LoginPage;
         }
     });
   }

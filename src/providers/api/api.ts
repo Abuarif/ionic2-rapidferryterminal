@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
@@ -181,18 +181,16 @@ export class ApiProvider {
     });
   }
 
-  public add_ferry_op(data) {
-    let headers = new Headers({
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    }); // set json as Content-Type http header
-    let options = new RequestOptions({ headers: headers }); // encapsulate header into http request options
-    let body = JSON.stringify(data); // convert user Account object into JSON format
-    // console.log(body)
+  public add_ferry_op(ferry_id, ferry_order_id, service_date) {
+    console.log('api add ferry')
+    let url = '/api/set_ferry_ops.json' +
+      '?ferry_order_id=' + ferry_order_id +
+      '&ferry_id=' + ferry_id +
+      '&service_date=' + service_date
+    console.log('url: ' + url)
     return new Promise((resolve, reject) => {
-      // this.http.post(this.serverPath + '/api/set_ferry_ops.json', body)
-      this.http.post(this.serverPath + '/api/set_ferry_ops.json', body, options)
+      this.http.get(this.serverPath + url
+      )
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {
@@ -206,6 +204,18 @@ export class ApiProvider {
     return new Promise((resolve, reject) => {
 
       this.http.get(this.serverPath + '/api/delete_trip.json')
+        .subscribe(res => {
+          resolve(res.json());
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  public delete_ferry_op(id) {
+    return new Promise((resolve, reject) => {
+
+      this.http.get(this.serverPath + '/api/delete_ferry_ops.json?id=' + id)
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {

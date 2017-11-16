@@ -1,5 +1,5 @@
+import { FerryOperation } from './../../models/ferryoperation';
 import { Output } from './../../models/output';
-import { Api } from './../../providers/api';
 import { DataApi } from './../../providers/data-api';
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, AlertController, ActionSheetController } from 'ionic-angular';
@@ -7,6 +7,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { LoginPage } from '../login/login';
 import { FerryAssignmentPage } from '../ferry-assignment/ferry-assignment';
+import { ApiProvider } from '../../providers/api/api';
 
 @IonicPage()
 @Component({
@@ -25,7 +26,7 @@ export class Settings {
 
   constructor(
     public dataApi: DataApi,
-    private api: Api,
+    private api: ApiProvider,
     public alertCtrl: AlertController,
     public _loadingController: LoadingController,
     public authService: AuthServiceProvider,
@@ -47,8 +48,14 @@ export class Settings {
     if (this.dataApi.get('ferry_ops')) {
       this.ferry_ops = this.dataApi.getFerryOps();
     }
-    this.getFerry();
-    this.get_ferry_ops();
+
+    if (!this.authService.authenticated()) {
+      this.navCtrl.push(LoginPage);
+    } else {
+      this.getFerry();
+      this.get_ferry_ops();
+    }
+
   }
 
   ionViewWillLeave() {
@@ -261,7 +268,7 @@ export class Settings {
           handler: () => {
             console.log('SignOut clicked');
             this.authService.logout();
-            this.navCtrl.setRoot(LoginPage);
+            // this.navCtrl.setRoot(LoginPage);
           }
         }, {
           text: 'Cancel',
@@ -283,5 +290,48 @@ export class Settings {
         'service_date': this.service_date
       }
     );
+  }
+
+  public remove(ferry_operation_entry) {
+    console.log('Remove: ' + ferry_operation_entry.FerryOperation.id)
+    let loading = this._loadingController.create({
+      content: "Please wait...",
+      duration: 3000
+    });
+
+    loading.present();
+
+    this.api.delete_ferry_op(ferry_operation_entry.FerryOperation.id)
+      .then((data) => {
+        loading.dismiss();
+        this.output = data as Output
+        if (this.output.result == '1') {
+          this.refresh_ferryops()
+        }
+      }, (err) => {
+        loading.dismiss();
+      });
+  }
+
+  public removeConfirmation(ferry_ops) {
+    let alert = this.alertCtrl.create({
+      title: 'Remove Ferry Assignment!',
+      message: 'Are you sure you want to remove this data?',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: data => {
+            console.log('Yes clicked');
+            this.remove(ferry_ops)
+          }
+        },{
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+      ]
+    });
+    alert.present();
   }
 }

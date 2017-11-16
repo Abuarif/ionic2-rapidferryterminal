@@ -1,3 +1,4 @@
+import { LoginPage } from './../login/login';
 import { DatePipe } from '@angular/common';
 import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { Promotions } from "../../models/promotions";
 import { Api } from "../../providers/api";
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 
 @Component({
   selector: 'page-home',
@@ -33,7 +35,8 @@ export class HomePage {
     private platform: Platform,
     private navCtrl: NavController,
     private dataApi: DataApi,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    public authService: AuthServiceProvider
   ) { }
 
   ionViewWillEnter() {
@@ -45,10 +48,12 @@ export class HomePage {
       this.service_date = this.dataApi.get('service_date');
     }
 
-    // if (!AuthGuardProvider.isAuthenticated()) {
-    //   this.navCtrl.push(LoginPage);
-    // }
-    this.getFerryTimetables();
+    if (!this.authService.authenticated()) {
+      this.navCtrl.push(LoginPage);
+    } else {
+      this.getFerryTimetables();
+    }
+
   }
 
   private getFerryTimetables() {
@@ -111,8 +116,8 @@ export class HomePage {
     let alert = this.alertCtrl.create({
       title: 'Service Date Verification!',
       message: 'Your current service date is not updated (' +
-      this.datePipe.transform(this.service_date, 'dd-MMM-yyyy') +
-      '). <br/><br/>Click <b>Change</b> to proceed.',
+        this.datePipe.transform(this.service_date, 'dd-MMM-yyyy') +
+        '). <br/><br/>Click <b>Change</b> to proceed.',
       buttons: [
         {
           text: 'Cancel',
@@ -166,7 +171,7 @@ export class HomePage {
   }
 
   public getDetail(timetable) {
-    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom':'home'  });
+    this.navCtrl.push(Trip, { trip: timetable, 'requestfrom': 'home' });
   }
 
   private parseTrip() {

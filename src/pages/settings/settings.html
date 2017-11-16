@@ -1,13 +1,18 @@
 <ion-header>
 
   <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button icon-left (click)="refresh_ferryops()">
+        <ion-icon name="ios-refresh-circle"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Settings</ion-title>
     <ion-buttons end>
       <button ion-button icon-left (click)="AdminSheet()">
-        <ion-icon name="boat"></ion-icon>
+        <ion-icon name="list"></ion-icon>
       </button>
       <button ion-button icon-left (click)="SignOutSheet()">
-        <ion-icon name="exit"></ion-icon>
+        <ion-icon name="power"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -18,8 +23,8 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item-divider>
-      Application Settings
+    <ion-item-divider text-center>
+      <h2>Application Settings</h2>
     </ion-item-divider>
     <ion-item>
       <ion-label>Pangkalan</ion-label>
@@ -33,23 +38,32 @@
       <ion-label>Date</ion-label>
       <ion-datetime displayFormat="DDD, DD MMM YYYY" pickerFormat="DD-MM-YYYY" [(ngModel)]="service_date" (ionChange)="displayServiceDate()"></ion-datetime>
     </ion-item>
-    <ion-item-divider>
-      Ferry Assignments
+    <ion-item-divider text-center>
+      <h2>Ferry Assignments</h2>
     </ion-item-divider>
-    <!-- <ion-item *ngFor="let ferry of ferry_ops">
-      <ion-label>{{ferry.FerryOrder.name}}</ion-label>
-      <ion-note item-end> {{ ferry.Ferry.name }} </ion-note>
-    </ion-item> -->
-    <ion-item *ngFor="let ferry_op of ferry_ops">
-      <ion-label>{{ ferry_op.FerryOrder.name }} </ion-label>
-      <ion-select [(ngModel)]="ferry_op.FerryOperation.ferry_id" [disabled]="true">
-        <ion-option *ngFor="let ferry of ferries" value="{{ ferry.Ferry.id }}"> {{ ferry.Ferry.name }} </ion-option>
-      </ion-select>
+    <ion-item *ngIf="ferry_ops == 0">
+      <ion-note text-wrap>Click Add Ferry icon to create ferry assignment ... </ion-note>
     </ion-item>
-    <button ion-button outline block (click)="refresh_ferryops()">Reload</button>
-    <button ion-button outline block color="secondary" (click)="save_ferryops()">Save</button>
+    <ion-item-sliding *ngFor="let ferry_op of ferry_ops">
+      <ion-item>
+        <ion-label>{{ ferry_op.FerryOrder.name }} </ion-label>
+        <ion-select [(ngModel)]="ferry_op.FerryOperation.ferry_id" [disabled]="true">
+          <ion-option *ngFor="let ferry of ferries" value="{{ ferry.Ferry.id }}"> {{ ferry.Ferry.name }} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="removeConfirmation(ferry_op)">
+          <ion-icon name="trash"></ion-icon>
+          Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
+
   <ion-fab right bottom>
-    <button ion-fab color="secondary" (click)="add_ferry_op()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab color="secondary" (click)="add_ferry_op()">
+      <ion-icon name="add"></ion-icon>
+      <ion-icon name="boat"></ion-icon>
+    </button>
   </ion-fab>
 </ion-content>

@@ -1,3 +1,4 @@
+import { Output } from './../../models/output';
 import { FerryOperation } from './../../models/ferryoperation';
 import { ApiProvider } from './../../providers/api/api';
 import { Component } from '@angular/core';
@@ -27,7 +28,7 @@ export class FerryAssignmentPage {
   ) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     console.log('ionViewDidLoad FerryAssignmentPage');
     this.service_date = this.navParams.get('service_date');
 
@@ -55,18 +56,15 @@ export class FerryAssignmentPage {
   public add_ferryops() {
     this.ferry_operation.status = '1'; 
     this.ferry_operation.service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd')
-    let loading = this.loadingCtrl.create({
-      content: "Please wait...",
-      duration: 3000
-    });
-    loading.present();
-    this.api.add_ferry_op(this.ferry_operation)
+    
+    this.api.add_ferry_op(this.ferry_operation.ferry_id, this.ferry_operation.ferry_order_id, this.ferry_operation.service_date)
       .then((data) => {
-        this.output = data;
-        loading.dismiss();
-        console.log(this.output)
+        this.output = data as Output;
+        console.log('alalalala ' + this.output)
+        if (this.output.result == 1) {
+          this.navCtrl.pop();
+        }
       }, (err) => {
-        loading.dismiss();
       });
   }
 }

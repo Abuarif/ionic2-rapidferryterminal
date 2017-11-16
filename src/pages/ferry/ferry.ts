@@ -1,3 +1,4 @@
+import { LoginPage } from './../login/login';
 import { DatePipe } from '@angular/common';
 import { Settings } from './../settings/settings';
 import { Trip } from './../trip/trip';
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { Promotions } from "../../models/promotions";
 import { Api } from "../../providers/api";
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 
 @Component({
   selector: 'page-ferry',
@@ -34,7 +36,8 @@ export class Ferry {
     private platform: Platform,
     private navCtrl: NavController,
     private dataApi: DataApi,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    public authService: AuthServiceProvider
   ) { }
 
   ionViewWillEnter() {
@@ -46,7 +49,12 @@ export class Ferry {
       this.service_date = this.dataApi.get('service_date');
     }
 
-    this.getHistory();
+    if (!this.authService.authenticated()) {
+      this.navCtrl.push(LoginPage);
+    } else {
+      this.getHistory();
+    }
+    
   }
 
   private getHistory() {
