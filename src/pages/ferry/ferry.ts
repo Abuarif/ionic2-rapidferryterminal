@@ -54,7 +54,7 @@ export class Ferry {
     } else {
       this.getHistory();
     }
-    
+
   }
 
   private getHistory() {
@@ -88,7 +88,7 @@ export class Ferry {
 
     setTimeout(() => {
       console.log('Async operation has ended');
-      this.api.get_ferryroutes(this.location)
+      this.api.get_history(this.location)
         .then((result) => {
           // this.timetables = <Ferrytrips[]>result;
           this.timetables = result;
@@ -104,8 +104,8 @@ export class Ferry {
     let alert = this.alertCtrl.create({
       title: 'Service Date Verification!',
       message: 'Your current service date is not updated (' +
-      this.datePipe.transform(this.service_date, 'dd-MMM-yyyy') +
-      '). <br/><br/>Click <b>Change</b> to proceed.',
+        this.datePipe.transform(this.service_date, 'dd-MMM-yyyy') +
+        '). <br/><br/>Click <b>Change</b> to proceed.',
       buttons: [
         {
           text: 'Cancel',
