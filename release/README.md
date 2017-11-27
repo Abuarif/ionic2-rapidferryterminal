@@ -28,7 +28,7 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.
 Remove old APK
 
 ```bash
-rm ~/Downloads/PStaff.apk
+rm ~/Downloads/RapidFerryTerminal.apk
 ```
 
 Zip align tool to optimize the APK
