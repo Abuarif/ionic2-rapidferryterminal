@@ -43,10 +43,10 @@
       </ion-note>
 
       <ion-note item-end *ngIf="location == 'PSAH'">
-        {{ timetable.FerryRoute.boarding_a | date: 'hh:mm a'}}
+        {{ timetable.FerryRoute.boarding_b | date: 'hh:mm a'}}
       </ion-note>
       <ion-note item-end *ngIf="location == 'PRTU'">
-        {{ timetable.FerryRoute.boarding_b | date: 'hh:mm a'}}
+        {{ timetable.FerryRoute.boarding_a | date: 'hh:mm a'}}
       </ion-note>
 
     </ion-item>
