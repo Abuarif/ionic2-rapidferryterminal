@@ -181,7 +181,7 @@ export class Trip {
 
     let date1 = new Date(this.delayed_departure)
     let date2 = new Date(this.departure_time)
-    if (page == 'history' && this.isDelay && !isCancelled && (date1.getTime() < date2.getTime() || date1.getTime() == date2.getTime())) {
+    if (page == 'home' && this.isDelay && !isCancelled && (date1.getTime() < date2.getTime() || date1.getTime() == date2.getTime())) {
       submit = false;
       this.showAlert();
     }
@@ -192,6 +192,8 @@ export class Trip {
   }
 
   private setFerryTrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
+
+    console.log('Delayed: ' + delayed_departure);
 
     this.api.set_ferrytrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian)
       .then((result) => {
