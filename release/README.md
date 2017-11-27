@@ -22,7 +22,7 @@ keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg R
 Sign the unsigned APK
 
 ```bash
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore /Users/prasaranaict/Projects/ionic2-rapidferryterminal/platforms/android/build/outputs/apk/release/android-release-unsigned.apk alias_name
 
 ```
 Remove old APK
@@ -34,5 +34,5 @@ rm ~/Downloads/PStaff.apk
 Zip align tool to optimize the APK
 
 ```bash
-~/Library/Android/sdk/build-tools/26.0.2/zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk ~/Downloads/RapidFerryTerminal.apk
+~/Library/Android/sdk/build-tools/26.0.2/zipalign -v 4  /Users/prasaranaict/Projects/ionic2-rapidferryterminal/platforms/android/build/outputs/apk/release/android-release-unsigned.apk ~/Downloads/RapidFerryTerminal.apk
 ```
