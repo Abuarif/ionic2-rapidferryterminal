@@ -52,7 +52,8 @@ export class ApiProvider {
           '&isOnTime=' + isOnTime +
           '&isFull=' + isFull +
           '&time_depart=' + this.datePipe.transform(time_depart, 'yyyy-MM-dd H:mm') +
-          '&delayed_departure=' + this.datePipe.transform(delayed_departure, 'yyyy-MM-dd H:mm') +
+          '&delayed_departure=' + this.datePipe.transform(service_date, 'yyyy-MM-dd') + ' ' + delayed_departure +
+          // '&delayed_departure=' + this.datePipe.transform(delayed_departure, 'yyyy-MM-dd H:mm') +
           '&isCancelled=' + isCancelled +
           '&actual_ferry=' + actual_ferry +
           '&lorry=' + lorry +

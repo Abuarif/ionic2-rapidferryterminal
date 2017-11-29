@@ -137,9 +137,9 @@ export class Trip {
     }
 
     if (this.location == 'PSAH') {
-      this.departure_time = this.timetable.FerryRoute.boarding_a
+      this.departure_time = this.timetable.FerryRoute.departure_a
     } else {
-      this.departure_time = this.timetable.FerryRoute.boarding_b
+      this.departure_time = this.timetable.FerryRoute.departure_b
     }
     if (this.timetable.FerryRoute.delayed_departure) {
       this.delayed_departure = this.timetable.FerryRoute.delayed_departure
@@ -176,6 +176,7 @@ export class Trip {
     if (this.isCancel) {
       isCancelled = 1;
     }
+    console.log('service: ' + this.service_date)
     console.log('delayed depart: ' + this.delayed_departure)
     console.log('Actual Ferry: ' + this.actual_ferry)
 
@@ -193,7 +194,8 @@ export class Trip {
 
   private setFerryTrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian) {
 
-    console.log('Delayed: ' + delayed_departure);
+    
+    // console.log('Delayed: ' + delayed_departure);
 
     this.api.set_ferrytrip(page, location, route_id, route_timetable_id, service_date, isOnTime, isFull, time_depart, delayed_departure, isCancelled, actual_ferry, lorry, car, motorcycle, bicycle, pedestarian)
       .then((result) => {
