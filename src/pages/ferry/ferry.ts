@@ -70,8 +70,9 @@ export class Ferry {
       this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
       // this.checkServiceDate();
     }
+    let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
 
-    this.api.get_history(this.location)
+    this.api.get_history(this.location, service_date)
       .then((result) => {
         loading.dismiss();
         // this.timetables = <Ferrytrips[]>result;
@@ -90,10 +91,11 @@ export class Ferry {
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
+    let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
 
     setTimeout(() => {
       console.log('Async operation has ended');
-      this.api.get_history(this.location)
+      this.api.get_history(this.location, service_date)
         .then((result) => {
           // this.timetables = <Ferrytrips[]>result;
           this.timetables = result;
