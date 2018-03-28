@@ -23,11 +23,11 @@ export class Api {
     });
   }
 
-  public get_ferrytrips(location) {
+  public get_ferrytrips(location, service_date) {
     console.log('get_ferrytrips');
     return new Promise((resolve, reject) => {
 
-      this.http.get(this.serverPath + '/api/get_ferrytrips.json?location=' + location)
+      this.http.get(this.serverPath + '/api/get_ferrytrips.json?location=' + location + '&service_date=' + service_date)
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {
@@ -86,11 +86,11 @@ export class Api {
     });
   }
 
-  public get_ferryroutes(location) {
+  public get_ferryroutes(location, service_date: string) {
     console.log('get_ferryroutes');
     return new Promise((resolve, reject) => {
 
-      this.http.get(this.serverPath + '/api/get_ferryroutes.json?location=' + location)
+      this.http.get(this.serverPath + '/api/get_ferryroutes.json?location=' + location + '&service_date=' + service_date)
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {
@@ -99,11 +99,11 @@ export class Api {
     });
   }
 
-  public get_history(location) {
+  public get_history(location, service_date) {
     console.log('get_history');
     return new Promise((resolve, reject) => {
 
-      this.http.get(this.serverPath + '/api/get_trip_history.json?location=' + location)
+      this.http.get(this.serverPath + '/api/get_trip_history.json?location=' + location + '&service_date=' + service_date)
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {

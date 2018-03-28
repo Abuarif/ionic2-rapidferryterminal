@@ -87,7 +87,7 @@ export class ApiProvider {
     });
   }
 
-  public get_ferryroutes(location, service_date) {
+  public get_ferryroutes(location, service_date: string) {
     console.log('get_ferryroutes');
     return new Promise((resolve, reject) => {
 

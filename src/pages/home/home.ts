@@ -59,23 +59,14 @@ export class HomePage {
 
   private getFerryTimetables() {
 
-    if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
-      this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
-      // this.checkServiceDate();
-    }
-
-    this.api.get_ferryroutes(this.location)
+    let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
+    this.api.get_ferryroutes(this.location, service_date)
       .then((result) => {
-        // loading.dismiss();
         this.timetables = result;
-        // this.timetables = <Ferrytrips[]>result;
-        // console.log(this.timetables);
         this.parseTrip();
         console.log(this.timetables);
         this.checkInternetMsg = '';
       }, (err) => {
-        // loading.dismiss();
-        // this.presentConfirm();
         this.timetables = Array();
         this.checkInternetMsg = 'Data not found. Please check your internet! If the service persist, contact your IT Admin';
       });
@@ -84,13 +75,11 @@ export class HomePage {
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
-    if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
-      this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
-      this.checkServiceDate();
-    }
+    let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
+
     setTimeout(() => {
       console.log('Async operation has ended');
-      this.api.get_ferryroutes(this.location)
+      this.api.get_ferryroutes(this.location, service_date)
         .then((result) => {
           this.timetables = <Ferrytrips[]>result;
           console.log(this.timetables);
