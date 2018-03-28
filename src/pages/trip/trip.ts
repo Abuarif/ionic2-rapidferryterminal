@@ -156,6 +156,7 @@ export class Trip {
     } else if (this.location == 'PSAH') {
       myTime = this.timetable.FerryRoute.departure_a;
     }
+    console.log(myTime);
     if (!this.isDelay) {
       this.time_depart = myTime;
     }

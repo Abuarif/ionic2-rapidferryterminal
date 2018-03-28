@@ -43,7 +43,7 @@
     </ion-item>
     <ion-item *ngIf="(isDelay && !isCancel)">
       <ion-label>Delayed Departure Time</ion-label>
-      <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" [(ngModel)]="delayed_departure" [required]="isDelay"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YY hh:mm a" pickerFormat="DD/MM/YY hh:mm a" [(ngModel)]="delayed_departure" [required]="isDelay"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="isAllow">
       <ion-label>Actual Ferry</ion-label>

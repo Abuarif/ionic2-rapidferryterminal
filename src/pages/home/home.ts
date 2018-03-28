@@ -27,6 +27,7 @@ export class HomePage {
   submission_label: string;
   is_ontime: boolean;
   is_full: boolean;
+  public checkInternetMsg = '';
 
   constructor(
     public _loadingController: LoadingController,
@@ -60,7 +61,7 @@ export class HomePage {
 
     if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
       this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
-      this.checkServiceDate();
+      // this.checkServiceDate();
     }
 
     this.api.get_ferryroutes(this.location)
@@ -68,13 +69,17 @@ export class HomePage {
         // loading.dismiss();
         this.timetables = result;
         // this.timetables = <Ferrytrips[]>result;
-        console.log(this.timetables);
-        this.parseTrip();
         // console.log(this.timetables);
+        this.parseTrip();
+        console.log(this.timetables);
+        this.checkInternetMsg = '';
       }, (err) => {
         // loading.dismiss();
-        this.presentConfirm();
+        // this.presentConfirm();
+        this.timetables = Array();
+        this.checkInternetMsg = 'Data not found. Please check your internet! If the service persist, contact your IT Admin';
       });
+    console.log(this.service_date)
   }
 
   doRefresh(refresher) {
@@ -176,17 +181,49 @@ export class HomePage {
 
   private parseTrip() {
     this.timetables.forEach(element => {
-      let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
 
-      element.FerryRoute.boarding_a = service_date + 'T' + element.FerryRoute.boarding_a + ':00.000+08:00'
-      element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
-      element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
-      element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+      // let service_date = this.datePipe.transform(this.service_date, 'yyyy-MM-dd');
+
+      // element.FerryRoute.boarding_a = service_date + 'T' + element.FerryRoute.boarding_a + ':00.000+08:00'
+      // element.FerryRoute.boarding_b = service_date + 'T' + element.FerryRoute.boarding_b + ':00.000+08:00'
+      // element.FerryRoute.departure_a = service_date + 'T' + element.FerryRoute.departure_a + ':00.000+08:00'
+      // element.FerryRoute.departure_b = service_date + 'T' + element.FerryRoute.departure_b + ':00.000+08:00'
+
+      element.FerryRoute.boarding_a = this.is_next_day(element.FerryRoute.boarding_a)
+      element.FerryRoute.boarding_b = this.is_next_day(element.FerryRoute.boarding_b)
+      element.FerryRoute.departure_a = this.is_next_day(element.FerryRoute.departure_a)
+      element.FerryRoute.departure_b = this.is_next_day(element.FerryRoute.departure_b)
 
       if (element.FerryRoute.time_depart != '') {
         element.FerryRoute.time_depart = new Date(element.FerryRoute.time_depart).toUTCString();
       }
     });
+  }
+
+  private is_next_day(element_entry) {
+    let day = 0;
+    let parts = element_entry.split(':');
+    let hour = '00'
+    if (parseInt(parts[0], 10) == 24) {
+      hour = '00';
+      day = 1;
+    } else if (parseInt(parts[0], 10) > 24) {
+      let new_hour = parseInt(parts[0], 10) - 24
+      if (new_hour < 10) {
+        hour = '0' + new_hour;
+      } else {
+        hour = new_hour.toString();
+      }
+      day = 1;
+    } else {
+      hour = parts[0]
+    }
+
+    let todayDate = new Date();
+    let service_date = this.datePipe.transform(new Date().setDate(todayDate.getDate() + day), 'yyyy-MM-dd');
+    element_entry = service_date + 'T' + hour + ':' + parts[1] + ':00.000+08:00';
+    return element_entry
+
   }
 }
 

@@ -28,6 +28,7 @@ export class Ferry {
   submission_label: string;
   is_ontime: boolean;
   is_full: boolean;
+  public checkInternetMsg = '';
 
   constructor(
     public _loadingController: LoadingController,
@@ -67,7 +68,7 @@ export class Ferry {
 
     if (this.datePipe.transform(this.service_date, 'dd-MM-yyyy') !=
       this.datePipe.transform(new Date().toISOString(), 'dd-MM-yyyy')) {
-      this.checkServiceDate();
+      // this.checkServiceDate();
     }
 
     this.api.get_history(this.location)
@@ -77,9 +78,13 @@ export class Ferry {
         this.timetables = result;
         console.log(this.timetables);
         this.parseTrip();
+        this.checkInternetMsg = '';
       }, (err) => {
         loading.dismiss();
-        // this.presentConfirm();
+        // this.presentConfirm();   
+        this.timetables = Array();     
+        this.checkInternetMsg = 'Data not found. Please check your internet! If the service persist, contact your IT Admin';
+
       });
   }
 

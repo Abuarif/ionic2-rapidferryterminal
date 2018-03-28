@@ -18,6 +18,11 @@
       </h2>
       <p>{{ service_date | date:'dd, MMMM yyyy'}}</p>
     </ion-item-divider>
+    <ion-item-divider color="danger" text-center *ngIf="checkInternetMsg != ''" text-wrap>
+      <h2>
+        {{ checkInternetMsg }}
+      </h2>
+    </ion-item-divider>
 
     <ion-item-divider>
       <ion-note>
